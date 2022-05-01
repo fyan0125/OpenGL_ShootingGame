@@ -3,7 +3,7 @@
 // 
 
 #include "header/Angel.h"
-#include "Common/CQuadEX2B.h"
+#include "Common/CQuad.h"
 
 #define SPACE_KEY 32
 #define SCREEN_SIZE 800

@@ -158,6 +158,7 @@ void Win_Mouse(int button, int state, int x, int y) {
 	switch(button) {
 		case GLUT_LEFT_BUTTON:   // 目前按下的是滑鼠左鍵
 			if ( state == GLUT_DOWN ) ;  
+
 			break;
 		case GLUT_MIDDLE_BUTTON:  // 目前按下的是滑鼠中鍵 
 			if ( state == GLUT_DOWN )  ;

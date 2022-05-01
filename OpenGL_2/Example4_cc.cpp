@@ -180,7 +180,6 @@ float g_fClock = 0;
 //y = 380 * sinf(g_tMotion * 0.5 * 3.1415926);
 ////	printf("%8.1f %8.1f\n", x, y);
 
-
 // The motion callback for a window is called when the mouse moves within the window while one or more mouse buttons are pressed.
 void autoMotion(float dt) {
 

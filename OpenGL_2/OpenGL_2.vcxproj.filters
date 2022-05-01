@@ -33,20 +33,17 @@
     <ClCompile Include="Common\CQuad.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="Common\CQuadEX1.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\CQuadEX2B.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
     <ClCompile Include="Common\CCQuad.cpp">
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="Common\CShape.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="test.cpp">
+    <ClCompile Include="Example1.cpp">
       <Filter>原始程式檔</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Move.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -68,16 +65,16 @@
     <ClInclude Include="Common\CQuad.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="Common\CQuadEX1.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\CQuadEX2B.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="Common\CCQuad.h">
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="Common\CShape.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Header\glfw3.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Move.h">
       <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>

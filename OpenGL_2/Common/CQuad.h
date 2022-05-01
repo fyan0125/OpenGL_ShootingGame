@@ -1,6 +1,7 @@
-#ifndef CQUAD_H
-#define CQUAD_H
+#ifndef CQuad_H
+#define CQuad_H
 #include "../header/Angel.h"
+#include "Move.h"
 
 typedef Angel::vec4  color4;
 typedef Angel::vec4  point4;
@@ -10,6 +11,9 @@ typedef Angel::vec4  point4;
 class CQuad
 {
 private:
+	vec2 _position;
+	vec2 _velocity;
+
 	vec4 _Points[QUAD_NUM];
 	vec4 _Colors[QUAD_NUM];
 	// VAO
@@ -17,7 +21,7 @@ private:
 	// VBO
 	GLuint _uiBuffer;
 	//  for Shader
-	GLuint _uiProgram ;
+	GLuint _uiProgram;
 	// Vertex Position Attribute
 	GLuint _uiModelView, _uiProjection;
 	// Matrix 
@@ -29,11 +33,18 @@ private:
 	bool  _bUpdateProj;
 
 	void CreateBufferObject();
-public:
-	CQuad();
 
-	void setShader(mat4 &mxModelView, mat4 &mxProjection, GLuint uiShaderHandle=MAX_UNSIGNED_INT);
-	GLuint getShaderHandle() { return _uiProgram;}
+public:
+	void setPosition(vec2 newPosition);
+	vec2 getPosition();
+	void setVelocity(vec2 newVector);
+	vec2 getVelocity();
+	void update();
+
+	CQuad(vec2 position);
+
+	void setShader(mat4 &mxModelView, mat4 &mxProjection, GLuint uiShaderHandle = MAX_UNSIGNED_INT);
+	GLuint getShaderHandle() { return _uiProgram; }
 	void setViewMatrix(mat4 &mat);
 	void setProjectionMatrix(mat4 &mat);
 	void setTRSMatrix(mat4 &mat);
@@ -43,8 +54,5 @@ public:
 	void draw();
 	void drawW();
 };
-
-
-
 
 #endif
