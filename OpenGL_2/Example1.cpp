@@ -1,5 +1,7 @@
 #include "header/Angel.h"
 #include "Common/CQuad.h"
+#include "Header/glfw3.h"
+#include <stdlib.h>
 #include <vector>
 using namespace std;
 
@@ -12,7 +14,7 @@ using namespace std;
 
 CQuad *g_pQuad;	// 宣告 Quad 指標物件，結束時記得釋放
 vector<CQuad *> *ballsAry;
-CQuad *ball;
+vector<CQuad *> *enemyAry;
 
 // For Model View and Projection Matrix
 mat4 g_mxModelView(1.0f);
@@ -45,6 +47,7 @@ void init( void )
 	g_pQuad->setShader(g_mxModelView, g_mxProjection);
 
 	ballsAry = new vector<CQuad *>;
+	enemyAry = new vector<CQuad *>;
 
     glClearColor( 0.0, 0.0, 0.0, 1.0 ); // black background
 }
@@ -55,46 +58,93 @@ void Shoot(int x, int y)
 	g_fTx = 20.0f*(x - HALFX) / (HALFX);
 	g_fTy = -30.0f*(y - HALFY) / (HALFY);
 	vec2 position = vec2(g_fTx, g_fTy);
-	cout << position << endl;
 
-	ball = new CQuad(position);
+	CQuad *ball = new CQuad(position);
 	vec4 vColor = vec4(1, 0, 1, 1);
 	ball->setColor(vColor);
 	g_mxProjection = Ortho(-20.0f, 20.0f, -30.0f, 30.0f, -20.0f, 20.0f);
 	ball->setShader(g_mxModelView, g_mxProjection);
-	vec2 velocity = vec2(0.0f, 0.01f);
-	ball->setVelocity(velocity);
-	void onFrameMove(float delta);
+	ball->setVelocity(vec2(0.0f, 0.01f));
 	ballsAry->push_back(ball);
 }
 //----------------------------------------------------------------------------
-void UpdateMatrix(float x_vel, float y_vel)
+void Enemy()
 {
-	g_fQuadT[0] += x_vel;
-	g_fQuadT[1] += y_vel;
-	mxRT = Translate(g_fQuadT[0], g_fQuadT[1], g_fQuadT[2]);
-	ball->setTRSMatrix(mxRT);
+	int locationX = rand() % (unsigned int)SCREENX;
+	vec2 position = vec2(locationX, 20);
+	CQuad *newEnemy = new CQuad(position);
+	newEnemy->setColor(vec4(1, 1, 0, 1));
+	g_mxProjection = Ortho(-20.0f, 20.0f, -20.0f, 20.0f, -20.0f, 20.0f);
+	newEnemy->setShader(g_mxModelView, g_mxProjection);
+	newEnemy->setVelocity(vec2(0.0f, -0.01f));
+	enemyAry->push_back(newEnemy);
 }
+
+bool checkForCollision(CQuad *a, CQuad *b)
+{
+	return !(
+		a->getPosition().x <= b->getPosition().x
+		);
+}
+
 //----------------------------------------------------------------------------
 void GL_Display(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT); // clear the window
-	g_pQuad->draw();
+
+	g_pQuad->draw();//draw player
+
+	//draw bullet
 	for (vector<CQuad *>::iterator spriteIterator = ballsAry->begin();
 		spriteIterator != ballsAry->end(); spriteIterator++)
 	{
 		(*spriteIterator)->draw();
 	}
+
+	//draw enemy
+	for (vector<CQuad *>::iterator spriteIterator = enemyAry->begin();
+		spriteIterator != enemyAry->end(); spriteIterator++)
+	{
+		(*spriteIterator)->draw();
+	}
+
 	glutSwapBuffers();	// 交換 Frame Buffer
 }
 
 void onFrameMove(float delta)
 {
+	//按下滑鼠發射子彈
+	if (shooting == true)Shoot(mouseX, mouseY);
+	
 	vector<vector<CQuad *>::iterator> deleteArray;
+
+	for (vector<CQuad *>::iterator spriteIteratorEnemy = enemyAry->begin();
+		spriteIteratorEnemy != enemyAry->end(); spriteIteratorEnemy++)
+	{
+		/*if (checkForCollision(*spriteIteratorEnemy, g_pQuad))
+		{
+			deleteArray.push_back(spriteIteratorEnemy);
+		}
+		for (vector<CQuad *>::iterator spriteIteratorBullet = ballsAry->begin();
+			spriteIteratorBullet != ballsAry->end(); spriteIteratorBullet++)
+		{
+			if (checkForCollision(*spriteIteratorEnemy, *spriteIteratorBullet))
+			{
+				deleteArray.push_back(spriteIteratorBullet);
+				deleteArray.push_back(spriteIteratorEnemy);
+			}
+		}*/
+		if ((*spriteIteratorEnemy)->getPosition().y < -20)
+		{
+			deleteArray.push_back(spriteIteratorEnemy);
+		}
+	}
+
+	//刪掉離開視窗的子彈
 	for (vector<CQuad *>::iterator spriteIterator = ballsAry->begin();
 		spriteIterator != ballsAry->end(); spriteIterator++)
 	{
-		if ((*spriteIterator)->getPosition().y > 20)
+		if ((*spriteIterator)->getPosition().y > 30)
 		{
 			deleteArray.push_back(spriteIterator);
 		}
@@ -103,16 +153,32 @@ void onFrameMove(float delta)
 	for (vector<vector<CQuad *>::iterator>::iterator deleteIterator = deleteArray.begin();
 		deleteIterator != deleteArray.end(); deleteIterator++)
 	{
-		ballsAry->erase(*deleteIterator);
+		if ((**deleteIterator)->getVelocity().x > 0)ballsAry->erase(*deleteIterator);
+		else enemyAry->erase(*deleteIterator);
 	}
 
-	if (shooting == true)Shoot(mouseX, mouseY);
-
+	//子彈隨時間移動
 	for (vector<CQuad *>::iterator spriteIterator = ballsAry->begin();
 		spriteIterator != ballsAry->end(); spriteIterator++)
 	{
 		(*spriteIterator)->update();
 	}
+
+	//出現敵人
+	static int updates = 0;
+	if (updates >= 60) {
+		Enemy();
+		updates = 0;
+	}
+	updates++;
+
+	//敵人隨時間移動
+	for (vector<CQuad *>::iterator spriteIterator = enemyAry->begin();
+		spriteIterator != enemyAry->end(); spriteIterator++)
+	{
+		(*spriteIterator)->update();
+	}
+
 	GL_Display();
 }
 //----------------------------------------------------------------------------
@@ -183,13 +249,7 @@ void Win_Keyboard(unsigned char key, int x, int y)
 //----------------------------------------------------------------------------
 void Win_SpecialKeyboard(int key, int x, int y) {
 	switch (key) {
-	case GLUT_KEY_LEFT:		// 目前按下的是向左方向鍵，移動 Red 往左
-		/*if (g_fQuadT[0] > -11.5f)//避免超出視窗
-		{
-			g_fQuadT[0] -= 0.5f;
-			mxRT = Translate(g_fQuadT[0], g_fQuadT[1], g_fQuadT[2]);
-			UpdateMatrix(0.1f, 0.1f);
-		}*/
+	case GLUT_KEY_LEFT:
 		break;
 	}
 }
