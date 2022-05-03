@@ -16,11 +16,11 @@ public:
 	vec4* _Colors; // 儲存頂點顏色的指標變數
 
 	int  _nVtx; // 這個物件有幾個 vertex
-	char* _pVXshader, * _pFSshader; //vertex 與 pixel shader 的字元指標
+	char* _pVXshader, *_pFSshader; //vertex 與 pixel shader 的字元指標
 	GLfloat _fColor[4]; // object's color
 	GLfloat _fClock; // 物件自己的時間
 
-	//  for Shader
+					 //  for Shader
 	GLuint _uiProgram;
 	// Vertex Position Attribute
 	GLuint _uiModelView, _uiProjection;
@@ -54,7 +54,7 @@ public:
 
 	virtual void draw() = 0;
 	virtual void drawW() = 0; // Drawing without setting shaders
-
+	mat4 GetTRSMatrix();
 };
 
 

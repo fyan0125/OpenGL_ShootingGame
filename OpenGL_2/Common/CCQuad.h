@@ -19,5 +19,5 @@ public:
 
 	void draw();
 	void drawW();
-	
+
 };

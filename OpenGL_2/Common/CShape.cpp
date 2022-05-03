@@ -14,7 +14,7 @@ CShape::CShape()
 	_uiBuffer = 0;
 	_bUpdateMV = false;
 	_bUpdateProj = false;
-	_fColor[0] = _fColor[1] = _fColor[2] = _fColor[3] = 1.0f;	
+	_fColor[0] = _fColor[1] = _fColor[2] = _fColor[3] = 1.0f;
 }
 
 CShape::~CShape()
@@ -55,7 +55,7 @@ void CShape::setShader(mat4& mxView, mat4& mxProjection, GLuint uiShaderHandle)
 
 	GLuint vColor = glGetAttribLocation(_uiProgram, "vColor");
 	glEnableVertexAttribArray(vColor);
-	glVertexAttribPointer(vColor, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(_nVtx*sizeof(vec4)));
+	glVertexAttribPointer(vColor, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(_nVtx * sizeof(vec4)));
 
 	_uiModelView = glGetUniformLocation(_uiProgram, "ModelView");
 	_mxView = mxView;
@@ -113,5 +113,10 @@ void CShape::setColor(vec4 vColor)
 		_Colors[i].w = _fColor[3];
 	}
 	glBindBuffer(GL_ARRAY_BUFFER, _uiBuffer);
-	glBufferSubData(GL_ARRAY_BUFFER, _nVtx*sizeof(vec4), _nVtx * sizeof(vec4), _Colors);
+	glBufferSubData(GL_ARRAY_BUFFER, _nVtx * sizeof(vec4), _nVtx * sizeof(vec4), _Colors);
+}
+
+mat4 CShape::GetTRSMatrix()
+{
+	return _mxTRS;
 }
