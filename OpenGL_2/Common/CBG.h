@@ -3,21 +3,22 @@
 #include "CCQuad.h"
 #include "../Header/Angel.h"
 
-#define BG_NUM 2
-#define X 10
-#define Y 14
+#define BG_NUM 5
+#define X 5
+#define Y 7
 
 class CBG
 {
 protected:
 	mat4 g_mxModelView = 1.0f;
-	mat4 g_mxProjection = Ortho(-12.0f, 12.0f, -12.0f, 12.0f, -12.0f, 12.0f);
+	mat4 g_mxProjection = Ortho(-5.0f, 5.0f, -7.0f, 7.0f, -12.0f, 12.0f);
 
 	CCQuad *_pBG[BG_NUM];
 
 	float _fSpeed;						//TRS matrix
 	float _fBGT[BG_NUM][3] = { 0 };
-	mat4 _mxBGT;
+	float _fBGScale;
+	mat4 _mxBGT, _mxBGS;
 
 public:
 	CBG();
