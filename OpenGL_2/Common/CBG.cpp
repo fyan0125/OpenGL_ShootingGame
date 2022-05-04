@@ -6,7 +6,7 @@ CBG::CBG()
 
 
 	for (int i = 0; i < BG_NUM; i++) {
-		_pBG[i] = new CCQuad(1);
+		_pBG[i] = new CCQuad(0);
 		_pBG[i]->setColor(vec4(0.7f, 0.7f, 0.7f, 1));
 		_pBG[i]->setShaderName("vsVtxColor.glsl", "fsVtxColor.glsl");
 		_pBG[i]->setShader(g_mxModelView, g_mxProjection);
@@ -15,7 +15,7 @@ CBG::CBG()
 		_fBGT[i][1] = -Y + (rand() % (Y * 2) + (rand() % 10)*0.1);	//y®y¼Ð
 		_fBGT[i][2] = -5;				
 		_mxBGT = Translate(_fBGT[i][0], _fBGT[i][1], _fBGT[i][2]);
-		_fBGScale = 0.03f;
+		_fBGScale = 0.1f;
 		_mxBGS = Scale(_fBGScale, _fBGScale, _fBGScale);
 		_pBG[i]->setTRSMatrix(_mxBGT*_mxBGS);
 	}

@@ -25,6 +25,32 @@ CCQuad::CCQuad()
 	_bUpdateProj = false;
 }
 
+CCQuad::CCQuad(int objectID)
+{
+	switch (objectID)
+	{
+	case 0:
+		_nVtx = 6;
+		_Points = new vec4[_nVtx];
+
+		_Points[0] = vec4(-0.5f, 0.5f, 0.0f, 1.0f);
+		_Points[1] = vec4(0.5f, 0.5f, 0.0f, 1.0f);
+		_Points[2] = vec4(0.5f, -0.5f, 0.0f, 1.0f);
+		_Points[3] = vec4(-0.5f, 0.5f, 0.0f, 1.0f);
+		_Points[4] = vec4(0.5f, -0.5f, 0.0f, 1.0f);
+		_Points[5] = vec4(-0.5f, -0.5f, 0.0f, 1.0f);
+
+		_Colors = new vec4[_nVtx];
+		for(int i = 0; i < _nVtx; i++) _Colors[i] = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+		break;
+	case 1:
+		break;
+	}
+	// Create and initialize a buffer object 
+	CreateBufferObject();
+	_bUpdateProj = false;
+}
+
 
 void CCQuad::draw()
 {
@@ -40,7 +66,7 @@ void CCQuad::draw()
 		glUniformMatrix4fv(_uiProjection, 1, GL_TRUE, _mxProjection);
 		_bUpdateProj = false;
 	}
-	glDrawArrays(GL_TRIANGLES, 0, QUAD_NUM);
+	glDrawArrays(GL_TRIANGLES, 0, _nVtx);
 }
 
 void CCQuad::drawW()
@@ -57,5 +83,5 @@ void CCQuad::drawW()
 		glUniformMatrix4fv(_uiProjection, 1, GL_TRUE, _mxProjection);
 		_bUpdateProj = false;
 	}
-	glDrawArrays(GL_TRIANGLES, 0, QUAD_NUM);
+	glDrawArrays(GL_TRIANGLES, 0, _nVtx);
 }

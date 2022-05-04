@@ -92,7 +92,7 @@ void Win_Mouse(int button, int state, int x, int y) {
 //----------------------------------------------------------------------------
 // The passive motion callback for a window is called when the mouse moves within the window while no mouse buttons are pressed.
 void Win_PassiveMotion(int x, int y) {
-	g_fPTx = 12.0f * (x - HALFX) / (HALFX);
+	g_fPTx = 5.0f * (x - HALFX) / (HALFX);
 	mxRT = Translate(g_fPTx, PLAYER_Y_AXIS, 0);
 	g_pPlayer->GL_SetTRSMatrix(mxRT);
 	g_pPlayer->GL_SetTranslatMatrix(mxRT);
@@ -100,7 +100,7 @@ void Win_PassiveMotion(int x, int y) {
 }
 // The motion callback for a window is called when the mouse moves within the window while one or more mouse buttons are pressed.
 void Win_MouseMotion(int x, int y) {
-	g_fPTx = 12.0f * (x - HALFX) / (HALFX);
+	g_fPTx = 5.0f * (x - HALFX) / (HALFX);
 	mxRT = Translate(g_fPTx, PLAYER_Y_AXIS, 0);
 	g_pPlayer->GL_SetTRSMatrix(mxRT);
 	g_pPlayer->GL_SetTranslatMatrix(mxRT);

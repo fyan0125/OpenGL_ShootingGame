@@ -14,13 +14,14 @@ class CPlayer
 {
 protected:
 	mat4 g_mxModelView = 1.0f;
-	mat4 g_mxProjection = Ortho(-12.0f, 12.0f, -12.0f, 12.0f, -12.0f, 12.0f);
+	mat4 g_mxProjection = Ortho(-5.0f, 5.0f, -7.0f, 7.0f, -12.0f, 12.0f);
 
 	CCQuad *_pPlayer;
 	CCQuad *_pMask[MASK_NUM];
 											
 	float _fPT[3] = { 0 };				//TRS matrix	
-	mat4 _mxPT;
+	float _fscale = 1;
+	mat4 _mxPT, _mxPS;
 
 	GLfloat _AngleSpeed;						
 	mat4 _mxMask[MASK_NUM];				

@@ -15,6 +15,7 @@ private:
 
 public:
 	CCQuad();
+	CCQuad(int objectID);
 	~CCQuad() {};
 
 	void draw();

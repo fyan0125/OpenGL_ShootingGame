@@ -3,13 +3,16 @@
 
 CPlayer::CPlayer()
 {
-	_mxPT = Translate(0, PLAYER_Y_AXIS, 0);
+	
 	
 	_pPlayer = new CCQuad();
 	_pPlayer->setColor(vec4(1.0f, 0.0f, 1.0f, 1.0f));
 	_pPlayer->setShaderName("vsVtxColor.glsl", "fsVtxColor.glsl");
 	_pPlayer->setShader(g_mxModelView, g_mxProjection);
-	_pPlayer->setTRSMatrix(_mxPT);
+	_mxPT = Translate(0, PLAYER_Y_AXIS, 0);
+	_fscale = 0.5f;
+	_mxPS = Scale(_fscale, _fscale, _fscale);
+	_pPlayer->setTRSMatrix(_mxPT*_mxPS);
 
 	//Mask
 	_AngleSpeed = 0;

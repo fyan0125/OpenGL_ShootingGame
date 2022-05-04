@@ -13,7 +13,9 @@ CBullet::CBullet() //Player  Bullet
 
 	_fBT[1] = PLAYER_Y_AXIS;
 	_mxBT = Translate(-20, _fBT[1], _fBT[2]);
-	_pBullet->setTRSMatrix(_mxBT);
+	_fscale = 0.5f;
+	_mxBS = Scale(_fscale, _fscale, _fscale);
+	_pBullet->setTRSMatrix(_mxBT*_mxBS);
 }
 
 CBullet::~CBullet()
@@ -41,7 +43,7 @@ void CBullet::PlayerShoot(float delta, float passive_x)
 	}
 	_fBT[1] += delta * _fBulletSpeed;
 	_mxBT = Translate(_fBT[0], _fBT[1], _fBT[2]);
-	_pBullet->setTRSMatrix(_mxBT);
+	_pBullet->setTRSMatrix(_mxBT*_mxBS);
 }
 
 void CBullet::ResetBullet(float fPTx)

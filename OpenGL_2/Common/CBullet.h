@@ -7,13 +7,13 @@ class CBullet
 {
 protected:
 	mat4 g_mxModelView = 1.0f;
-	mat4 g_mxProjection = Ortho(-12.0f, 12.0f, -12.0f, 12.0f, -12.0f, 12.0f);
+	mat4 g_mxProjection = Ortho(-5.0f, 5.0f, -7.0f, 7.0f, -12.0f, 12.0f);
 	
 	CCQuad *_pBullet;
 
 	float _fBT[3] = { 0 };				
 	float _fscale = 1;
-	mat4 _mxBT;							
+	mat4 _mxBT, _mxBS;
 
 public:
 	CBullet();
