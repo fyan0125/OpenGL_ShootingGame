@@ -3,8 +3,6 @@
 
 CPlayer::CPlayer()
 {
-	
-	
 	_pPlayer = new CCQuad();
 	_pPlayer->setColor(vec4(1.0f, 0.0f, 1.0f, 1.0f));
 	_pPlayer->setShaderName("vsVtxColor.glsl", "fsVtxColor.glsl");
@@ -22,8 +20,8 @@ CPlayer::CPlayer()
 		_pMask[i]->setColor(vec4(1.0f, 1.0f, 0.0f, 1.0f));
 		_pMask[i]->setShaderName("vsVtxColor.glsl", "fsVtxColor.glsl");
 		_pMask[i]->setShader(g_mxModelView, g_mxProjection);
-		_mxMask[i] = Translate(DE_RADIUS * cosf(M_PI*2.0f*i / MASK_NUM), DE_RADIUS * sinf(M_PI*2.0f*i / MASK_NUM), 0.0f);
-		_pMask[i]->setTRSMatrix(_mxPT * _mxMask[i]);
+		_mxMask[i] = Translate(MASK_RADIUS * cosf(M_PI*2.0f*i / MASK_NUM), MASK_RADIUS * sinf(M_PI*2.0f*i / MASK_NUM), 0.0f);
+		_pMask[i]->setTRSMatrix(_mxPT * _mxMask[i] * _mxPS);
 	}
 
 	_BulletNum = 0;
@@ -55,8 +53,13 @@ void CPlayer::UpdateMatrix(float delta)
 	if (_AngleSpeed > 360) _AngleSpeed -= 360;
 	for (int i = 0; i < MASK_NUM; i++) {
 		mxMa[i] = RotateZ(_AngleSpeed);
-		_pMask[i]->setTRSMatrix(_mxPT * mxMa[i] * _mxMask[i]);
+		_pMask[i]->setTRSMatrix(_mxPT * mxMa[i] * _mxMask[i] * _mxPS);
 	}
+}
+
+float CPlayer::GetPlayerScale()
+{
+	return _fscale;
 }
 
 void CPlayer::GL_DrawMask()

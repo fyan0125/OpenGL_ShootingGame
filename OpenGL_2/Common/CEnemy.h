@@ -9,10 +9,10 @@
 class CEnemy
 {
 protected:
-	CCQuad *_pMainBody;
+	CCQuad *_pEnemy;
 					
-	float _fMT[3] = { 0 };		// For TRS
-	mat4 _mxMT;					//for main object translation
+	float _fET[3] = { 0 };		// For TRS
+	mat4 _mxET;					//for main object translation
 
 								// Bullet List
 	mat4 _mxBT;								// for bullet translate

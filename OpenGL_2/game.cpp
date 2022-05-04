@@ -11,23 +11,25 @@ using namespace std;
 #define SCREENY 800
 #define HALFX (SCREENX/2) 
 #define HALFY (SCREENY/2) 
-#define Update_Per_Second 60
 #define NEXT_BULLET_DELAY 0.45f
+#define MOB_NUM 10
 
 CPlayer *g_pPlayer;
 CBG *g_pBG;
-CMob *g_pMob;
+CMob *g_pMob[MOB_NUM];
 
-float  g_fQuadT[3];
-mat4  mxRT;
+GLfloat g_fPTx = 0;		//玩家座標
+mat4  mxPT, mxPS;
+float _fcount = 0;		//玩家子彈間隔時間
 
-GLfloat g_fPTx = 0, g_fTy = 0;
-
-float _fcount = 0; //子彈間隔時間
+bool _Alive = true;
+bool _MobAlive[MOB_NUM];
+bool _BossAlive = false;
 
 //----------------------------------------------------------------------------
 // 函式的原型宣告
 void IdleProcess();
+void Collision(float delta);
 
 void init(void)
 {
@@ -35,9 +37,24 @@ void init(void)
 
 	g_pBG = new CBG;
 	g_pPlayer = new CPlayer;
-	g_pMob = new CMob(RandomColor);
+	for (int i = 0; i < MOB_NUM; i++)
+	{
+		g_pMob[i] = new CMob();
+		_MobAlive[i] = true;
+	}
 
 	glClearColor(0.0, 0.0, 0.0, 1.0); // black background
+}
+
+void Collision(float delta)
+{
+	for (int i = 0; i < MOB_NUM; i++)
+	{
+		if (!_MobAlive[i])
+		{
+			_BossAlive = true;
+		}
+	}
 }
 
 //----------------------------------------------------------------------------
@@ -46,10 +63,12 @@ void GL_Display(void)
 	glClear(GL_COLOR_BUFFER_BIT); // clear the window
 
 	g_pBG->GL_Draw();
-	g_pPlayer->GL_Draw();
+	if(_Alive)g_pPlayer->GL_Draw();
 	g_pPlayer->GL_DrawMask();
-	g_pMob->GL_Draw();
-
+	for (int i = 0; i < MOB_NUM; i++)
+	{
+		if (_MobAlive[i])g_pMob[i]->GL_Draw();
+	}
 	glutSwapBuffers();	// 交換 Frame Buffer
 }
 
@@ -68,6 +87,9 @@ void onFrameMove(float delta)
 
 	g_pPlayer->UpdateMatrix(delta);
 	g_pBG->UpdateMatrix(delta);
+	for (int i = 0; i < MOB_NUM; i++)g_pMob[i]->UpdateMatrix(delta);
+
+	Collision(delta);
 
 	GL_Display();
 }
@@ -77,6 +99,10 @@ void Win_Mouse(int button, int state, int x, int y) {
 	case GLUT_LEFT_BUTTON:   // 目前按下的是滑鼠左鍵
 		if (state == GLUT_DOWN)
 		{
+			for (int i = 0; i < MOB_NUM; i++)
+			{
+				_MobAlive[i] = !_MobAlive[i];
+			}
 		}
 		break;
 	case GLUT_MIDDLE_BUTTON:  // 目前按下的是滑鼠中鍵 
@@ -92,18 +118,24 @@ void Win_Mouse(int button, int state, int x, int y) {
 //----------------------------------------------------------------------------
 // The passive motion callback for a window is called when the mouse moves within the window while no mouse buttons are pressed.
 void Win_PassiveMotion(int x, int y) {
+	float fPlayerScale;
 	g_fPTx = 5.0f * (x - HALFX) / (HALFX);
-	mxRT = Translate(g_fPTx, PLAYER_Y_AXIS, 0);
-	g_pPlayer->GL_SetTRSMatrix(mxRT);
-	g_pPlayer->GL_SetTranslatMatrix(mxRT);
+	mxPT = Translate(g_fPTx, PLAYER_Y_AXIS, 0);
+	fPlayerScale = g_pPlayer->GetPlayerScale();
+	mxPS = Scale(fPlayerScale, fPlayerScale, fPlayerScale);	//大小
+	g_pPlayer->GL_SetTRSMatrix(mxPT * mxPS);
+	g_pPlayer->GL_SetTranslatMatrix(mxPT);
 	
 }
 // The motion callback for a window is called when the mouse moves within the window while one or more mouse buttons are pressed.
 void Win_MouseMotion(int x, int y) {
+	float fPlayerScale;
 	g_fPTx = 5.0f * (x - HALFX) / (HALFX);
-	mxRT = Translate(g_fPTx, PLAYER_Y_AXIS, 0);
-	g_pPlayer->GL_SetTRSMatrix(mxRT);
-	g_pPlayer->GL_SetTranslatMatrix(mxRT);
+	mxPT = Translate(g_fPTx, PLAYER_Y_AXIS, 0);
+	fPlayerScale = g_pPlayer->GetPlayerScale();
+	mxPS = Scale(fPlayerScale, fPlayerScale, fPlayerScale);	//大小
+	g_pPlayer->GL_SetTRSMatrix(mxPT * mxPS);
+	g_pPlayer->GL_SetTranslatMatrix(mxPT);
 }
 //----------------------------------------------------------------------------
 void Win_Keyboard(unsigned char key, int x, int y)

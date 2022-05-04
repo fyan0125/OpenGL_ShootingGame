@@ -4,7 +4,6 @@ CBG::CBG()
 {
 	_fSpeed = 10.f;
 
-
 	for (int i = 0; i < BG_NUM; i++) {
 		_pBG[i] = new CCQuad(0);
 		_pBG[i]->setColor(vec4(0.7f, 0.7f, 0.7f, 1));

@@ -4,11 +4,13 @@
 #include "../Header/Angel.h"
 #include "CCQuad.h"
 #include "CBullet.h"
+#include <vector>
+using namespace std;
 
-#define PLAYER_Y_AXIS -8.f			//ª±®aY¶b¦ì¸m
+#define PLAYER_Y_AXIS -5.0f			//ª±®aY¶b¦ì¸m
 #define BULLET_NUM 10				//¤l¼u¼Æ¶q
 #define MASK_NUM 3				//¨¾Å@¸n¼Æ¶q
-#define DE_RADIUS 3.0f				//¨¾Å@¸n  ¶ZÂ÷¥b®|
+#define MASK_RADIUS 1.5f				//¨¾Å@¸n  ¶ZÂ÷¥b®|
 
 class CPlayer
 {
@@ -41,6 +43,7 @@ public:
 	void GL_SetTRSMatrix(mat4 &mat);
 	void GL_SetTranslatMatrix(mat4 &mat);
 	void UpdateMatrix(float delta);
+	float GetPlayerScale();
 
 	int _BulletNum;
 	void CreateBulletList();

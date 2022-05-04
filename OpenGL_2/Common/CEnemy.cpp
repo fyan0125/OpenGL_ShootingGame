@@ -2,18 +2,18 @@
 
 CEnemy::CEnemy()
 {
-	_pMainBody = NULL;
-	_mxMT = Translate(_fMT[0], _fMT[1], _fMT[2]); // 0
+	_pEnemy = NULL;
+	_mxET = Translate(_fET[0], _fET[1], _fET[2]); // 0
 }
 
 CEnemy::~CEnemy()
 {
-	if (_pMainBody != NULL) delete _pMainBody;
+	if (_pEnemy != NULL) delete _pEnemy;
 }
 
 mat4 CEnemy::GetTranslateMatrix()
 {
-	return _mxMT;
+	return _mxET;
 }
 
 mat4 CEnemy::GetBulletTranslateMatrix()
