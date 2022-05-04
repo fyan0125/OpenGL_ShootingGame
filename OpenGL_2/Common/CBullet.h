@@ -11,26 +11,23 @@ protected:
 	
 	CCQuad *_pBullet;
 
-	float _fBT[3] = { 0 };				//TRS matrix
+	float _fBT[3] = { 0 };				
 	float _fscale = 1;
-	mat4 _mxBT;							//for bullet translation
-	mat4 _mxBR;							//for bullet rotation
-	mat4 _mxBS;							//for bullet scale
+	mat4 _mxBT;							
 
 public:
-	CBullet();							//傳入欲發射子彈的玩家物件
-	CBullet(float y);
+	CBullet();
 	~CBullet();
-	CBullet *link;						//for link list
+	CBullet *link;						
 
 	bool _isShoot;						
-	float _fBulletSpeed;				//子彈速度
+	float _fBulletSpeed;				
 
 	void GL_Draw();
 	void GL_SetTRSMatrix(mat4 &mat);
 
-	void ShootBulletUp(float delta, float passive_x);				//向上發射子彈
-	void ResetBullet(float x);									//設定子彈顏色
+	void PlayerShoot(float delta, float passive_x);
+	void ResetBullet(float x);						
 
 	mat4 GetTranslateMatrix();
 	mat4 GetTRSMatrix();

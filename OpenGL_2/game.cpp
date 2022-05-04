@@ -1,27 +1,29 @@
 #include "header/Angel.h"
 #include "Common/CPlayer.h"
+#include "Common/CBG.h"
+#include "Common/CMob.h"
 #include <stdlib.h>
 #include <vector>
 using namespace std;
 
 #define SPACE_KEY 32
 #define SCREENX 500
-#define SCREENY 700
+#define SCREENY 800
 #define HALFX (SCREENX/2) 
 #define HALFY (SCREENY/2) 
 #define Update_Per_Second 60
 #define NEXT_BULLET_DELAY 0.45f
 
 CPlayer *g_pPlayer;
+CBG *g_pBG;
+CMob *g_pMob;
 
 float  g_fQuadT[3];
 mat4  mxRT;
 
 GLfloat g_fPTx = 0, g_fTy = 0;
 
-bool shooting = false;
-
-float _fcount = 0;
+float _fcount = 0; //子彈間隔時間
 
 //----------------------------------------------------------------------------
 // 函式的原型宣告
@@ -29,10 +31,11 @@ void IdleProcess();
 
 void init(void)
 {
-	
-	vec2 position = vec2(0, 0);
+	int RandomColor = rand() % 3;
 
+	g_pBG = new CBG;
 	g_pPlayer = new CPlayer;
+	g_pMob = new CMob(RandomColor);
 
 	glClearColor(0.0, 0.0, 0.0, 1.0); // black background
 }
@@ -42,8 +45,10 @@ void GL_Display(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT); // clear the window
 
+	g_pBG->GL_Draw();
 	g_pPlayer->GL_Draw();
-	g_pPlayer->GL_DrawDefense();
+	g_pPlayer->GL_DrawMask();
+	g_pMob->GL_Draw();
 
 	glutSwapBuffers();	// 交換 Frame Buffer
 }
@@ -52,16 +57,17 @@ void onFrameMove(float delta)
 {
 	//玩家子彈
 	_fcount += delta;
-	if (_fcount < 0.8f) g_pPlayer->ShootBullet(delta, g_fPTx);	//發射子彈
+	if (_fcount < 0.8f) 
+	{
+		g_pPlayer->ShootBullet(delta, g_fPTx);	//發射子彈
+	}
 	else {
-		if (!shooting) {
-			g_pPlayer->NextBullet(g_fPTx);	//下一個子彈
-			_fcount -= 0.8f;
-		}
-		else _fcount = 0;			//蓄力完重新計數
+		g_pPlayer->NextBullet(g_fPTx);	//下一個子彈
+		_fcount -= 0.8f;
 	}
 
 	g_pPlayer->UpdateMatrix(delta);
+	g_pBG->UpdateMatrix(delta);
 
 	GL_Display();
 }
@@ -113,6 +119,7 @@ void Win_Keyboard(unsigned char key, int x, int y)
 		break;
 	case 033:
 		if (g_pPlayer != nullptr) delete g_pPlayer;
+		if (g_pBG != nullptr) delete g_pBG;
 		exit(EXIT_SUCCESS);
 		break;
 	}

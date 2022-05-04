@@ -36,9 +36,6 @@
     <ClCompile Include="Common\CShape.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="Common\Move.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
     <ClCompile Include="game.cpp">
       <Filter>原始程式檔</Filter>
     </ClCompile>
@@ -46,6 +43,15 @@
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="Common\CBullet.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\CEnemy.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\CBG.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\CMob.cpp">
       <Filter>Common</Filter>
     </ClCompile>
   </ItemGroup>
@@ -71,9 +77,6 @@
     <ClInclude Include="Common\CShape.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="Common\Move.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
@@ -81,6 +84,15 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="Common\CBullet.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\CEnemy.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\CBG.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\CMob.h">
       <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>

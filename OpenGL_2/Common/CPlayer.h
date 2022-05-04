@@ -1,5 +1,6 @@
 #ifndef CPLAYER_H
 #define CPLAYER_H
+#include <vector>
 #include "../Header/Angel.h"
 #include "CCQuad.h"
 #include "CBullet.h"
@@ -21,7 +22,6 @@ protected:
 	float _fPT[3] = { 0 };				//TRS matrix	
 	mat4 _mxPT;
 
-	//¨¾Å@¸n±ÛÂà³t«×
 	GLfloat _AngleSpeed;						
 	mat4 _mxMask[MASK_NUM];				
 
@@ -35,7 +35,7 @@ public:
 	~CPlayer();
 
 	void GL_Draw();			
-	void GL_DrawDefense();
+	void GL_DrawMask();
 
 	void GL_SetTRSMatrix(mat4 &mat);
 	void GL_SetTranslatMatrix(mat4 &mat);

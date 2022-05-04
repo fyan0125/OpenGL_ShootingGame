@@ -3,8 +3,6 @@
 
 CPlayer::CPlayer()
 {
-	g_mxModelView = 1.0f;
-	g_mxProjection = Ortho(-12.0f, 12.0f, -12.0f, 12.0f, -12.0f, 12.0f);
 	_mxPT = Translate(0, PLAYER_Y_AXIS, 0);
 	
 	_pPlayer = new CCQuad();
@@ -13,7 +11,7 @@ CPlayer::CPlayer()
 	_pPlayer->setShader(g_mxModelView, g_mxProjection);
 	_pPlayer->setTRSMatrix(_mxPT);
 
-	//DEFNESE
+	//Mask
 	_AngleSpeed = 0;
 	float fDEscale = 0.3f;
 	for (int i = 0; i < MASK_NUM; i++) {
@@ -48,17 +46,17 @@ void CPlayer::GL_Draw()
 
 void CPlayer::UpdateMatrix(float delta)
 {
-	mat4 mxDER[MASK_NUM];	//防護罩 繞轉矩陣
+	mat4 mxMa[MASK_NUM];
 
 	_AngleSpeed += 150.f * delta;
-	if (_AngleSpeed > 360) _AngleSpeed -= 360; //歸零
+	if (_AngleSpeed > 360) _AngleSpeed -= 360;
 	for (int i = 0; i < MASK_NUM; i++) {
-		mxDER[i] = RotateZ(_AngleSpeed);
-		_pMask[i]->setTRSMatrix(_mxPT * mxDER[i] * _mxMask[i]);
+		mxMa[i] = RotateZ(_AngleSpeed);
+		_pMask[i]->setTRSMatrix(_mxPT * mxMa[i] * _mxMask[i]);
 	}
 }
 
-void CPlayer::GL_DrawDefense()
+void CPlayer::GL_DrawMask()
 {
 	for (int i = 0; i < MASK_NUM; i++) _pMask[i]->draw();
 }
@@ -78,7 +76,7 @@ void CPlayer::GL_SetTranslatMatrix(mat4 &mat)
 void CPlayer::ShootBullet(float delta, float passive_x)
 {
 	_pBGet_shoot = _pBHead_shoot;
-	_pBGet_shoot->ShootBulletUp(delta, passive_x);
+	_pBGet_shoot->PlayerShoot(delta, passive_x);
 	_mxBT = _pBGet_shoot->GetTranslateMatrix();	//更新子彈位置
 	_pBGet_shoot->_isShoot = true;		//子彈射出
 }
@@ -111,7 +109,7 @@ void CPlayer::CreateBulletList()
 
 	for (int i = 0; i < BULLET_NUM - 1; i++) {
 		if ((_pBGet = new CBullet) == NULL) {
-			printf("記憶體不足\n"); exit(0);
+			exit(0);
 		}
 		_pBGet->link = nullptr;
 		_pBTail->link = _pBGet;
