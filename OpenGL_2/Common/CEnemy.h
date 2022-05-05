@@ -1,10 +1,12 @@
 #pragma once
 #ifndef CENEMY_H
 #define CENEMY_H
+#include <vector>
 #include "../Header/Angel.h"
 #include "CCamera.h"
 #include "CCQuad.h"
 #include "CBullet.h"
+using namespace std;
 
 class CEnemy
 {
@@ -18,8 +20,8 @@ protected:
 	mat4 _mxBT;								// for bullet translate
 	mat4 _mxBS;								// for big shoot scale
 	mat4 _mxBR;								//子彈轉向
-	CBullet *_pBHead, *_pBGet, *_pBTail;	//子彈串列
-	CBullet *_pBHead_shoot, *_pBGet_shoot;	//子彈發射用
+
+	vector<CBullet *> *ballsAry;
 
 public:
 
@@ -33,10 +35,8 @@ public:
 
 	int _BulletNum;
 	virtual void CreateBulletList() = 0;							//建立子彈串列
-	virtual void DeleteBulletList() = 0;							//刪除子彈串列
+	
 	virtual void ShootBullet(float delta) = 0;						//發射子彈
-	virtual void NextBullet() = 0;									//下一顆子彈
-	virtual void SetBulletPassiveMove() = 0;						//子彈未發射 跟隨角色
 
 };
 #endif

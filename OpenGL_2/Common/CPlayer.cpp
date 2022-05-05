@@ -97,7 +97,7 @@ void CPlayer::GL_SetTranslatMatrix(mat4 &mat)
 void CPlayer::ShootBullet(float delta, float passive_x)
 {
 	static int updates = 0;
-	if (updates >= 180) {
+	if (updates >= 500) {
 		CBullet *ball = new CBullet;
 		ballsAry->push_back(ball);
 		updates = 0;
@@ -130,7 +130,5 @@ void CPlayer::ShootBullet(float delta, float passive_x)
 
 void CPlayer::CreateBulletList()
 {
-	
-
 	ballsAry = new vector<CBullet *>;
 }

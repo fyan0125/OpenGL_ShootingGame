@@ -29,8 +29,5 @@ public:
 	void SetColor(int RandomColor);				//設定小怪顏色
 
 	void CreateBulletList();
-	void DeleteBulletList();
 	void ShootBullet(float delta);
-	void NextBullet();
-	void SetBulletPassiveMove();
 };

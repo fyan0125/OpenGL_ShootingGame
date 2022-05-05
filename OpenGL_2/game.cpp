@@ -126,10 +126,8 @@ void onFrameMove(float delta)
 	for (int i = 0; i < MOB_NUM; i++)
 	{
 		_fMcount += delta;
-		g_pMob[i]->SetBulletPassiveMove();
 		if (_fMcount < MOB_BULLET) g_pMob[i]->ShootBullet(delta);
 		else {
-			g_pMob[i]->NextBullet();
 			_fMcount -= MOB_BULLET;
 		}
 	}

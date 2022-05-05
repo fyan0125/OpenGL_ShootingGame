@@ -4,7 +4,6 @@
 #include "../Header/Angel.h"
 #include "CCQuad.h"
 #include "CBullet.h"
-#include <vector>
 using namespace std;
 
 #define PLAYER_Y_AXIS -5.0f			//ª±®aY¶b¦ì¸m
