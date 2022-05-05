@@ -1,6 +1,6 @@
-﻿  CMob.cpp
-c:\users\方雁\downloads\計算機圖學\作業\opengl_2\common\cmob.cpp(10): warning C4244: '=': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-c:\users\方雁\downloads\計算機圖學\作業\opengl_2\common\cmob.cpp(11): warning C4244: '=': 將 'int' 轉換為 'float'，由於類型不同，可能導致資料遺失
+﻿  game.cpp
+c:\users\方雁\downloads\計算機圖學\作業\opengl_2\game.cpp(111): warning C4390: ';': 找到空白的控制陳述式，是正確的嗎?
+c:\users\方雁\downloads\計算機圖學\作業\opengl_2\game.cpp(114): warning C4390: ';': 找到空白的控制陳述式，是正確的嗎?
   OpenGL_2.vcxproj -> C:\Users\方雁\Downloads\計算機圖學\作業\Debug\OpenGL_2.exe
   OpenGL_2.vcxproj -> C:\Users\方雁\Downloads\計算機圖學\作業\Debug\OpenGL_2.pdb (Full PDB)
   已複製 0 個檔案

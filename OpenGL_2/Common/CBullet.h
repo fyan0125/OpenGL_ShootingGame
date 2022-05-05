@@ -17,6 +17,7 @@ protected:
 
 public:
 	CBullet();
+	CBullet(float y);
 	~CBullet();
 	CBullet *link;						
 
@@ -27,7 +28,9 @@ public:
 	void GL_SetTRSMatrix(mat4 &mat);
 
 	void PlayerShoot(float delta, float passive_x);
-	void ResetBullet(float x);						
+	void ShootBulletDown(float delta, float passive_x, float passive_y, mat4 &mxS);
+	void ResetBullet(float x);
+	void ResetBullet(mat4 &mat, float x, float y);
 
 	mat4 GetTranslateMatrix();
 	mat4 GetTRSMatrix();

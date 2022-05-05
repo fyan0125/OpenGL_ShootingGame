@@ -11,19 +11,21 @@ using namespace std;
 #define SCREENY 800
 #define HALFX (SCREENX/2) 
 #define HALFY (SCREENY/2) 
-#define NEXT_BULLET_DELAY 0.45f
+#define PLAYER_BULLET 0.45f
+#define MOB_BULLET 1.0f
 #define MOB_NUM 10
 
 CPlayer *g_pPlayer;
 CBG *g_pBG;
-CMob *g_pMob[MOB_NUM];
+CMob *g_pMob;
 
 GLfloat g_fPTx = 0;		//玩家座標
 mat4  mxPT, mxPS;
 float _fcount = 0;		//玩家子彈間隔時間
+float _fMcount = 0;
 
 bool _Alive = true;
-bool _MobAlive[MOB_NUM];
+bool _MobAlive;
 bool _BossAlive = false;
 
 //----------------------------------------------------------------------------
@@ -37,23 +39,17 @@ void init(void)
 
 	g_pBG = new CBG;
 	g_pPlayer = new CPlayer;
-	for (int i = 0; i < MOB_NUM; i++)
-	{
-		g_pMob[i] = new CMob();
-		_MobAlive[i] = true;
-	}
+	g_pMob = new CMob();
+	_MobAlive = true;
 
 	glClearColor(0.0, 0.0, 0.0, 1.0); // black background
 }
 
 void Collision(float delta)
 {
-	for (int i = 0; i < MOB_NUM; i++)
+	if (!_MobAlive)
 	{
-		if (!_MobAlive[i])
-		{
-			_BossAlive = true;
-		}
+		_BossAlive = true;
 	}
 }
 
@@ -63,12 +59,12 @@ void GL_Display(void)
 	glClear(GL_COLOR_BUFFER_BIT); // clear the window
 
 	g_pBG->GL_Draw();
-	if(_Alive)g_pPlayer->GL_Draw();
-	g_pPlayer->GL_DrawMask();
-	for (int i = 0; i < MOB_NUM; i++)
+	if (_Alive)
 	{
-		if (_MobAlive[i])g_pMob[i]->GL_Draw();
+		g_pPlayer->GL_Draw();
+		g_pPlayer->GL_DrawMask();
 	}
+	if (_MobAlive)g_pMob->GL_Draw();
 	glutSwapBuffers();	// 交換 Frame Buffer
 }
 
@@ -76,18 +72,27 @@ void onFrameMove(float delta)
 {
 	//玩家子彈
 	_fcount += delta;
-	if (_fcount < 0.8f) 
+	if (_fcount < PLAYER_BULLET)
 	{
 		g_pPlayer->ShootBullet(delta, g_fPTx);	//發射子彈
 	}
 	else {
 		g_pPlayer->NextBullet(g_fPTx);	//下一個子彈
-		_fcount -= 0.8f;
+		_fcount -= PLAYER_BULLET;
 	}
+
+	_fMcount += delta;
+	g_pMob->SetBulletPassiveMove();	//未發射子彈跟隨BOSS1
+	if (_fMcount < MOB_BULLET) g_pMob->ShootBullet(delta);	//發射子彈
+	else {
+		g_pMob->NextBullet();	//下一個子彈
+		_fMcount -= MOB_BULLET;
+	}
+	
 
 	g_pPlayer->UpdateMatrix(delta);
 	g_pBG->UpdateMatrix(delta);
-	for (int i = 0; i < MOB_NUM; i++)g_pMob[i]->UpdateMatrix(delta);
+	g_pMob->UpdateMatrix(delta);
 
 	Collision(delta);
 
@@ -99,10 +104,7 @@ void Win_Mouse(int button, int state, int x, int y) {
 	case GLUT_LEFT_BUTTON:   // 目前按下的是滑鼠左鍵
 		if (state == GLUT_DOWN)
 		{
-			for (int i = 0; i < MOB_NUM; i++)
-			{
-				_MobAlive[i] = !_MobAlive[i];
-			}
+			
 		}
 		break;
 	case GLUT_MIDDLE_BUTTON:  // 目前按下的是滑鼠中鍵 
