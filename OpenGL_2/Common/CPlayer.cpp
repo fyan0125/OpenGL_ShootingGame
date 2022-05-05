@@ -43,6 +43,12 @@ void CPlayer::GL_Draw()
 		_pBGet->GL_Draw();
 		_pBGet = _pBGet->link;
 	}
+
+	for (vector<CBullet *>::iterator spriteIterator = ballsAry->begin();
+		spriteIterator != ballsAry->end(); spriteIterator++)
+	{
+		(*spriteIterator)->GL_Draw();
+	}
 }
 
 void CPlayer::UpdateMatrix(float delta)
@@ -51,10 +57,20 @@ void CPlayer::UpdateMatrix(float delta)
 
 	_AngleSpeed += 150.f * delta;
 	if (_AngleSpeed > 360) _AngleSpeed -= 360;
-	for (int i = 0; i < MASK_NUM; i++) {
+	for (int i = 0; i < _MaskNum; i++) {
 		mxMa[i] = RotateZ(_AngleSpeed);
 		_pMask[i]->setTRSMatrix(_mxPT * mxMa[i] * _mxMask[i] * _mxPS);
 	}
+}
+
+mat4 CPlayer::GetTranslateMatrix()
+{
+	return _mxPT;
+}
+
+mat4 CPlayer::GetBulletTranslateMatrix()
+{
+	return _mxBT;
 }
 
 float CPlayer::GetPlayerScale()
@@ -62,9 +78,14 @@ float CPlayer::GetPlayerScale()
 	return _fscale;
 }
 
+void CPlayer::AttackedByEnemies(float delta)
+{
+	_MaskNum -= 1;
+}
+
 void CPlayer::GL_DrawMask()
 {
-	for (int i = 0; i < MASK_NUM; i++) _pMask[i]->draw();
+	for (int i = 0; i < _MaskNum; i++) _pMask[i]->draw();
 }
 
 void CPlayer::GL_SetTRSMatrix(mat4 &mat)
@@ -82,9 +103,42 @@ void CPlayer::GL_SetTranslatMatrix(mat4 &mat)
 void CPlayer::ShootBullet(float delta, float passive_x)
 {
 	_pBGet_shoot = _pBHead_shoot;
-	_pBGet_shoot->PlayerShoot(delta, passive_x);
-	_mxBT = _pBGet_shoot->GetTranslateMatrix();	//更新子彈位置
-	_pBGet_shoot->_isShoot = true;		//子彈射出
+	//_pBGet_shoot->PlayerShoot(delta, passive_x);
+	//_mxBT = _pBGet_shoot->GetTranslateMatrix();	//更新子彈位置
+	//_pBGet_shoot->_isShoot = true;		//子彈射出
+
+	
+
+	static int updates = 0;
+	if (updates >= 180) {
+		CBullet *ball = new CBullet;
+		ballsAry->push_back(ball);
+		updates = 0;
+	}
+	updates++;
+
+	for (vector<CBullet *>::iterator spriteIterator = ballsAry->begin();
+		spriteIterator != ballsAry->end(); spriteIterator++)
+	{
+		(*spriteIterator)->PlayerShoot(delta, passive_x);
+		_mxBT = (*spriteIterator)->GetTranslateMatrix();
+	}
+
+	vector<vector<CBullet *>::iterator> deleteArray;
+	for (vector<CBullet *>::iterator spriteIterator = ballsAry->begin();
+		spriteIterator != ballsAry->end(); spriteIterator++)
+	{
+		if ((*spriteIterator)->getPosition() > 7)
+		{
+			deleteArray.push_back(spriteIterator);
+		}
+	}
+
+	for (vector<vector<CBullet *>::iterator>::iterator deleteIterator = deleteArray.begin();
+		deleteIterator != deleteArray.end(); deleteIterator++)
+	{
+		ballsAry->erase(*deleteIterator);
+	}
 }
 
 void CPlayer::NextBullet(float g_fPTx)
@@ -122,4 +176,6 @@ void CPlayer::CreateBulletList()
 		_pBTail = _pBGet;
 		_BulletNum++;
 	}
+
+	ballsAry = new vector<CBullet *>;
 }

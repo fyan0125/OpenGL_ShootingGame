@@ -5,7 +5,7 @@
 
 #define X 5
 #define Y 7
-#define BULLET_NUM 10	//子彈數量
+#define BULLET_NUM 2	//子彈數量
 
 class CMob : public CEnemy
 {

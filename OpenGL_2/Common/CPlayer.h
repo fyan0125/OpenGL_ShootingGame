@@ -18,6 +18,8 @@ protected:
 	mat4 g_mxModelView = 1.0f;
 	mat4 g_mxProjection = Ortho(-5.0f, 5.0f, -7.0f, 7.0f, -12.0f, 12.0f);
 
+	int _MaskNum = 3;
+
 	CCQuad *_pPlayer;
 	CCQuad *_pMask[MASK_NUM];
 											
@@ -33,6 +35,8 @@ protected:
 	CBullet *_pBHead, *_pBGet, *_pBTail;
 	CBullet *_pBHead_shoot, *_pBGet_shoot;
 
+	vector<CBullet *> *ballsAry;
+
 public:
 	CPlayer();
 	~CPlayer();
@@ -43,7 +47,10 @@ public:
 	void GL_SetTRSMatrix(mat4 &mat);
 	void GL_SetTranslatMatrix(mat4 &mat);
 	void UpdateMatrix(float delta);
+	mat4 GetTranslateMatrix();
+	mat4 GetBulletTranslateMatrix();
 	float GetPlayerScale();
+	void AttackedByEnemies(float delta);
 
 	int _BulletNum;
 	void CreateBulletList();

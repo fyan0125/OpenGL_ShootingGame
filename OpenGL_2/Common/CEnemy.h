@@ -31,7 +31,7 @@ public:
 	mat4 GetTranslateMatrix();						//取得BOSS位置
 	mat4 GetBulletTranslateMatrix();				//取得子彈位置
 
-	int _iBulletNum;
+	int _BulletNum;
 	virtual void CreateBulletList() = 0;							//建立子彈串列
 	virtual void DeleteBulletList() = 0;							//刪除子彈串列
 	virtual void ShootBullet(float delta) = 0;						//發射子彈

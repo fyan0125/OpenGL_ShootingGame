@@ -34,5 +34,6 @@ public:
 
 	mat4 GetTranslateMatrix();
 	mat4 GetTRSMatrix();
+	float getPosition();
 };
 #endif

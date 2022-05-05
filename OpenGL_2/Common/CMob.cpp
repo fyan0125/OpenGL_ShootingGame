@@ -3,15 +3,17 @@
 
 CMob::CMob()
 {
+	int RandomColor = rand() % 2;
 	_pEnemy = new CCQuad();
 	_pEnemy->setShaderName("vsVtxColor.glsl", "fsVtxColor.glsl");
 	_pEnemy->setShader(g_mxModelView, g_mxProjection);
-	_pEnemy->setColor(vec4(1.0f, 0.0f, 0.0f, 1));
+	if (RandomColor == 0) _pEnemy->setColor(vec4(1.0f, 0.0f, 0.0f, 1));		//隨機顏色
+	else if (RandomColor == 1) _pEnemy->setColor(vec4(0.0f, 1.0f, 0.0f, 1));
 	_fMT[0] = -X + (rand() % (X * 2) + (rand() % 10) * 0.1);	//x座標
-	_fMT[1] = Y;			//y座標
+	_fMT[1] = -Y + (rand() % (Y * 2) + (rand() % 10) * 10);			//y座標
 	_mxET = Translate(0, _fMT[1], 0);
 	_pEnemy->setTRSMatrix(_mxET);
-	_iBulletNum = 0;
+	_BulletNum = 0;
 	CreateBulletList();
 }
 
@@ -24,8 +26,8 @@ CMob::~CMob()
 void CMob::UpdateMatrix(float delta)
 {
 	_fMT[1] -= delta * _fMSpeed;	//y座標
-	_mxMT = Translate(_fMT[0], _fMT[1], _fMT[2]);
-	_pEnemy->setTRSMatrix(_mxMT);
+	_mxET = Translate(_fMT[0], _fMT[1], _fMT[2]);
+	_pEnemy->setTRSMatrix(_mxET);
 }
 void CMob::GL_Draw()
 {
@@ -69,7 +71,7 @@ void CMob::CreateBulletList()
 	float fspeed = rand() % 20 + 10.f;
 	_pBHead->_fBulletSpeed = fspeed;
 
-	_iBulletNum++;	//子彈數量紀錄
+	_BulletNum++;	//子彈數量紀錄
 
 					//the rest of nodes
 	for (int i = 0; i < BULLET_NUM - 1; i++) {
@@ -81,7 +83,7 @@ void CMob::CreateBulletList()
 		_pBTail = _pBGet;
 		_pBGet->GL_SetTRSMatrix(_mxMT * _mxBR); //設定子彈至BOSS位置
 		_pBGet->_fBulletSpeed = fspeed;
-		_iBulletNum++;	//子彈數量紀錄
+		_BulletNum++;	//子彈數量紀錄
 	}
 }
 void CMob::DeleteBulletList()
@@ -92,37 +94,43 @@ void CMob::DeleteBulletList()
 		delete _pBGet;
 		_pBGet = _pBHead;
 	}
-	_iBulletNum = 0;	//子彈數量歸零
+	_BulletNum = 0;	//子彈數量歸零
 }
+
 void CMob::ShootBullet(float delta)
 {
 	_pBGet_shoot = _pBHead_shoot;
-	_pBGet_shoot->ShootBulletDown(delta, _fMT[0], _fMT[1], _mxBS);
-	_mxBT = _pBGet_shoot->GetTranslateMatrix();	//更新子彈位置
-	_pBGet_shoot->_isShoot = true;		//子彈射出
+	if (_fMT[1] <= 7.0f && _fMT[1] >= -7.0f)
+	{
+		_pBGet_shoot->ShootBulletDown(delta, _fMT[0], _fMT[1], _mxBS);
+		_mxBT = _pBGet_shoot->GetTranslateMatrix();	//更新子彈位置
+		_pBGet_shoot->_isShoot = true;		//子彈射出
+	}
 }
+
 void CMob::NextBullet()
 {
-	_iBulletNum--;				//子彈數量紀錄
+	_BulletNum--;				//子彈數量紀錄
 	_pBHead_shoot = _pBHead_shoot->link;
 	_pBGet_shoot->_isShoot = false;
 
-	if (_iBulletNum == 0) {	//沒有子彈
+	if (_BulletNum == 0) {	//沒有子彈
 		_pBHead_shoot = _pBHead;
 		_pBGet_shoot = _pBHead_shoot;
 		while (_pBGet_shoot != nullptr) {
 			_pBGet_shoot->ResetBullet(_mxBR, _fMT[0], _fMT[1]); //子彈歸位
 			_pBGet_shoot = _pBGet_shoot->link;
-			_iBulletNum++; //子彈數量紀錄
+			_BulletNum++; //子彈數量紀錄
 		}
 	}
 }
+
 void CMob::SetBulletPassiveMove()
 {
 	_pBGet = _pBHead;	//子彈串列
 	while (_pBGet != nullptr) {
 		if (_pBGet->_isShoot == false) { //子彈尚未射出
-			_pBGet->GL_SetTRSMatrix(_mxMT * _mxBR);
+			_pBGet->GL_SetTRSMatrix(_mxET * _mxMT * _mxBR);
 		}
 		_pBGet = _pBGet->link;
 	}

@@ -48,6 +48,9 @@ void CBullet::GL_Draw()
 
 void CBullet::GL_SetTRSMatrix(mat4 &mat)
 {
+	_fBT[0] = mat._m[0][3];
+	_fBT[1] = mat._m[1][3];
+	_mxBT = Translate(_fBT[0], _fBT[1], _fBT[2]);
 	_pBullet->setTRSMatrix(mat);
 }
 
@@ -99,4 +102,11 @@ mat4 CBullet::GetTranslateMatrix()
 mat4 CBullet::GetTRSMatrix()
 {
 	return(_pBullet->GetTRSMatrix());
+}
+
+float CBullet::getPosition()
+{
+	float y;
+	y = _mxBT._m[1][3];
+	return y;
 }
