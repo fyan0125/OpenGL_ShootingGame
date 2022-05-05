@@ -121,15 +121,7 @@ void GL_Display(void)
 void onFrameMove(float delta)
 {
 	//玩家子彈
-	_fcount += delta;
-	if (_fcount < PLAYER_BULLET)
-	{
-		g_pPlayer->ShootBullet(delta, g_fPTx);	//發射子彈
-	}
-	else {
-		//g_pPlayer->NextBullet(g_fPTx);	//下一個子彈
-		_fcount -= PLAYER_BULLET;
-	}
+	g_pPlayer->ShootBullet(delta, g_fPTx);	//發射子彈
 	//小怪子彈
 	for (int i = 0; i < MOB_NUM; i++)
 	{

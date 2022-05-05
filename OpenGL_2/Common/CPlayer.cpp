@@ -38,12 +38,6 @@ void CPlayer::GL_Draw()
 {
 	_pPlayer->draw();
 
-	_pBGet = _pBHead;
-	while (_pBGet != nullptr) {
-		_pBGet->GL_Draw();
-		_pBGet = _pBGet->link;
-	}
-
 	for (vector<CBullet *>::iterator spriteIterator = ballsAry->begin();
 		spriteIterator != ballsAry->end(); spriteIterator++)
 	{
@@ -102,13 +96,6 @@ void CPlayer::GL_SetTranslatMatrix(mat4 &mat)
 
 void CPlayer::ShootBullet(float delta, float passive_x)
 {
-	_pBGet_shoot = _pBHead_shoot;
-	//_pBGet_shoot->PlayerShoot(delta, passive_x);
-	//_mxBT = _pBGet_shoot->GetTranslateMatrix();	//更新子彈位置
-	//_pBGet_shoot->_isShoot = true;		//子彈射出
-
-	
-
 	static int updates = 0;
 	if (updates >= 180) {
 		CBullet *ball = new CBullet;
@@ -141,41 +128,9 @@ void CPlayer::ShootBullet(float delta, float passive_x)
 	}
 }
 
-void CPlayer::NextBullet(float g_fPTx)
-{
-	_BulletNum--; //子彈數量紀錄
-	_pBHead_shoot = _pBHead_shoot->link;
-	_pBGet_shoot->_isShoot = false;
-
-	if (_BulletNum == 0) {	//沒有子彈
-		_pBHead_shoot = _pBHead;
-		_pBGet_shoot = _pBHead_shoot;
-		while (_pBGet_shoot != nullptr) {
-			_pBGet_shoot->ResetBullet(g_fPTx); //子彈歸位
-			_pBGet_shoot = _pBGet_shoot->link;
-			_BulletNum++; //子彈數量紀錄
-		}
-	}
-}
-
 void CPlayer::CreateBulletList()
 {
-	//first node
-	_pBHead = new CBullet;
-	_pBHead->link = nullptr;
-	_pBTail = _pBHead;
-	_pBHead_shoot = _pBHead;	
-	_BulletNum++;				
-
-	for (int i = 0; i < BULLET_NUM - 1; i++) {
-		if ((_pBGet = new CBullet) == NULL) {
-			exit(0);
-		}
-		_pBGet->link = nullptr;
-		_pBTail->link = _pBGet;
-		_pBTail = _pBGet;
-		_BulletNum++;
-	}
+	
 
 	ballsAry = new vector<CBullet *>;
 }

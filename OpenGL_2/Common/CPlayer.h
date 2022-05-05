@@ -32,8 +32,6 @@ protected:
 
 	// Bullet List
 	mat4 _mxBT;
-	CBullet *_pBHead, *_pBGet, *_pBTail;
-	CBullet *_pBHead_shoot, *_pBGet_shoot;
 
 	vector<CBullet *> *ballsAry;
 
@@ -55,6 +53,5 @@ public:
 	int _BulletNum;
 	void CreateBulletList();
 	void ShootBullet(float delta, float passive_x);
-	void NextBullet(float g_fPTx);
 };
 #endif
