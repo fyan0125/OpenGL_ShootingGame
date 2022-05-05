@@ -144,6 +144,7 @@ void onFrameMove(float delta)
 	{
 		g_pMob[i]->UpdateMatrix(delta);
 	}
+	g_pBoss->UpdateMatrix(delta);
 	
 
 	Collision(delta);

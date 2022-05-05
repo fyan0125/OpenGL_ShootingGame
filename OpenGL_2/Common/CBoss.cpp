@@ -9,11 +9,9 @@ CBoss::CBoss()
 	_pEnemy->setShader(g_mxModelView, g_mxProjection);
 	if (RandomColor == 0) _pEnemy->setColor(vec4(1.0f, 0.0f, 0.0f, 1));		//隨機顏色
 	else if (RandomColor == 1) _pEnemy->setColor(vec4(0.0f, 1.0f, 0.0f, 1));
-	_fMT[0] = -X + (rand() % (X * 2) + (rand() % 10) * 0.1);	//x座標
-	_fMT[1] = -Y + (rand() % (Y * 2) + (rand() % 10) * 10);			//y座標
+	_fMT[1] = 14;		//y座標
 	_mxET = Translate(0, _fMT[1], 0);
 	_pEnemy->setTRSMatrix(_mxET);
-	_BulletNum = 0;
 	CreateBulletList();
 }
 
@@ -25,10 +23,28 @@ CBoss::~CBoss()
 //----------------------------------------------
 void CBoss::UpdateMatrix(float delta)
 {
-	_fMT[1] -= delta * _fMSpeed;	//y座標
-	_mxET = Translate(_fMT[0], _fMT[1], _fMT[2]);
+	if (first)
+	{
+		_fMT[1] -= delta * _fMSpeed;	//y座標
+		_mxET = Translate(_fMT[0], _fMT[1], _fMT[2]);
+		if (_fMT[1] < 6)first = false;
+	}
+	else
+	{
+		float speed = 3.5f;
+		_fMAngle_Track += speed * delta;
+		if (_fMAngle_Track > 360) _fMAngle_Track -= 360;
+
+		float sint = sinf(_fMAngle_Track);
+		float cost2 = cosf(_fMAngle_Track / 2.f);
+		_fMT[0] = (cost2 * sint) * 4;
+		_fMT[1] = (cost2)+5.0f;
+		_mxET = Translate(_fMT[0], _fMT[1], _fMT[2]);
+	}
+	
 	_pEnemy->setTRSMatrix(_mxET);
 }
+
 void CBoss::GL_Draw()
 {
 	_pEnemy->draw();

@@ -24,7 +24,6 @@ CPlayer::CPlayer()
 		_pMask[i]->setTRSMatrix(_mxPT * _mxMask[i] * _mxPS);
 	}
 
-	_BulletNum = 0;
 	CreateBulletList();	//¤l¼u
 }
 

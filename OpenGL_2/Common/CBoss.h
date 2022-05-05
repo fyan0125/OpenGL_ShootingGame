@@ -14,10 +14,13 @@ protected:
 
 	float _fMT[3] = { 0 };
 	mat4 _mxMT;
+	GLfloat _fMAngle_Track = 0;
+
+	bool first = true;
 
 public:
 
-	float _fMSpeed = 2.0f;					//路徑速度
+	float _fMSpeed = 1.0f;					//路徑速度
 
 	CBoss();
 	~CBoss();

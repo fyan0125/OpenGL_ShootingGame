@@ -11,9 +11,8 @@ CMob::CMob()
 	else if (RandomColor == 1) _pEnemy->setColor(vec4(0.0f, 1.0f, 0.0f, 1));
 	_fMT[0] = -X + (rand() % (X * 2) + (rand() % 10) * 0.1);	//x®y¼Ð
 	_fMT[1] = -Y + (rand() % (Y * 2) + (rand() % 10) * 10);			//y®y¼Ð
-	_mxET = Translate(0, _fMT[1], 0);
+	_mxET = Translate(_fMT[0], _fMT[1], 0);
 	_pEnemy->setTRSMatrix(_mxET);
-	_BulletNum = 0;
 	CreateBulletList();
 }
 

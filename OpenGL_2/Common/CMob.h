@@ -17,7 +17,7 @@ protected:
 
 public:
 
-	float _fMSpeed = 2.0f;					//路徑速度
+	float _fMSpeed = 20.0f;					//路徑速度
 
 	CMob();
 	~CMob();

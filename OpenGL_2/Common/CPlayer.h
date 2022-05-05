@@ -48,7 +48,6 @@ public:
 	float GetPlayerScale();
 	void AttackedByEnemies(float delta);
 
-	int _BulletNum;
 	void CreateBulletList();
 	void ShootBullet(float delta, float passive_x);
 	void DeleteBullet();
