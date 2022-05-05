@@ -7,7 +7,6 @@
 using namespace std;
 
 #define PLAYER_Y_AXIS -5.0f			//ª±®aY¶b¦ì¸m
-#define BULLET_NUM 10				//¤l¼u¼Æ¶q
 #define MASK_NUM 3				//¨¾Å@¸n¼Æ¶q
 #define MASK_RADIUS 1.5f				//¨¾Å@¸n  ¶ZÂ÷¥b®|
 
@@ -52,5 +51,6 @@ public:
 	int _BulletNum;
 	void CreateBulletList();
 	void ShootBullet(float delta, float passive_x);
+	void DeleteBullet();
 };
 #endif

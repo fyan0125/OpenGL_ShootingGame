@@ -35,8 +35,7 @@ public:
 
 	int _BulletNum;
 	virtual void CreateBulletList() = 0;							//建立子彈串列
-	
 	virtual void ShootBullet(float delta) = 0;						//發射子彈
-
+	virtual void DeleteBullet() = 0;
 };
 #endif

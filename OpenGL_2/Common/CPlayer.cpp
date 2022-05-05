@@ -74,7 +74,13 @@ float CPlayer::GetPlayerScale()
 
 void CPlayer::AttackedByEnemies(float delta)
 {
-	_MaskNum -= 1;
+	static int updates = 0;
+	if (updates >= 300) {
+		_MaskNum -= 1;
+		updates = 0;
+		cout << "hit" << endl;
+	}
+	updates++;
 }
 
 void CPlayer::GL_DrawMask()
@@ -92,6 +98,11 @@ void CPlayer::GL_SetTranslatMatrix(mat4 &mat)
 	_mxPT = mat;
 	_fPT[0] = _mxPT._m[0][3];
 	_fPT[1] = _mxPT._m[1][3];
+}
+
+void CPlayer::CreateBulletList()
+{
+	ballsAry = new vector<CBullet *>;
 }
 
 void CPlayer::ShootBullet(float delta, float passive_x)
@@ -128,7 +139,18 @@ void CPlayer::ShootBullet(float delta, float passive_x)
 	}
 }
 
-void CPlayer::CreateBulletList()
+void CPlayer::DeleteBullet()
 {
-	ballsAry = new vector<CBullet *>;
+	vector<vector<CBullet *>::iterator> deleteArray;
+	for (vector<CBullet *>::iterator spriteIterator = ballsAry->begin();
+		spriteIterator != ballsAry->end(); spriteIterator++)
+	{
+		deleteArray.push_back(spriteIterator);
+	}
+
+	for (vector<vector<CBullet *>::iterator>::iterator deleteIterator = deleteArray.begin();
+		deleteIterator != deleteArray.end(); deleteIterator++)
+	{
+		ballsAry->erase(*deleteIterator);
+	}
 }

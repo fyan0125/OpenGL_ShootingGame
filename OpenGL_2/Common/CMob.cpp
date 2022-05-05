@@ -68,11 +68,10 @@ void CMob::ShootBullet(float delta)
 	static int updates = 0;
 	if (_fMT[1] <= 7.0f && _fMT[1] >= -7.0f)
 	{
-		if (updates >= 2000) {
+		if (updates >= 5000) {
 			CBullet *ball = new CBullet;
 			ballsAry->push_back(ball);
 			updates = 0;
-			cout << ballsAry->size() << endl;
 		}
 	}
 	
@@ -93,6 +92,22 @@ void CMob::ShootBullet(float delta)
 		{
 			deleteArray.push_back(spriteIterator);
 		}
+	}
+
+	for (vector<vector<CBullet *>::iterator>::iterator deleteIterator = deleteArray.begin();
+		deleteIterator != deleteArray.end(); deleteIterator++)
+	{
+		ballsAry->erase(*deleteIterator);
+	}
+}
+
+void CMob::DeleteBullet()
+{
+	vector<vector<CBullet *>::iterator> deleteArray;
+	for (vector<CBullet *>::iterator spriteIterator = ballsAry->begin();
+		spriteIterator != ballsAry->end(); spriteIterator++)
+	{
+		deleteArray.push_back(spriteIterator);
 	}
 
 	for (vector<vector<CBullet *>::iterator>::iterator deleteIterator = deleteArray.begin();

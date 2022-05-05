@@ -2,6 +2,7 @@
 #include "Common/CPlayer.h"
 #include "Common/CBG.h"
 #include "Common/CMob.h"
+#include "Common/CBoss.h"
 #include <stdlib.h>
 #include <vector>
 using namespace std;
@@ -18,6 +19,7 @@ using namespace std;
 CPlayer *g_pPlayer;
 CBG *g_pBG;
 CMob *g_pMob[MOB_NUM];
+CBoss *g_pBoss;
 
 GLfloat g_fPTx = 0;		//玩家座標
 mat4  mxPT, mxPS;
@@ -29,6 +31,7 @@ bool _MobAlive[MOB_NUM];
 bool _BossAlive = false;
 
 int _MobSurvive = MOB_NUM;
+int _life = 4;
 
 //----------------------------------------------------------------------------
 // 函式的原型宣告
@@ -46,7 +49,8 @@ void init(void)
 		g_pMob[i] = new CMob();
 		_MobAlive[i] = true;
 	}
-	
+	g_pBoss = new CBoss;
+
 
 	glClearColor(0.0, 0.0, 0.0, 1.0); // black background
 }
@@ -58,7 +62,7 @@ void Collision(float delta)
 	float fPBullet_x, fPBullet_y;		//player bullet position
 	float fMob_x[MOB_NUM], fMob_y[MOB_NUM];				//boss position
 	float fBBullet_x[MOB_NUM], fBBullet_y[MOB_NUM];		//boss bullet position
-
+	
 	if (_Alive) {		//玩家存在
 		mxPlayerPos = g_pPlayer->GetTranslateMatrix();			//取得玩家位置
 		fPlayer_x = mxPlayerPos._m[0][3];
@@ -77,23 +81,25 @@ void Collision(float delta)
 			mxMBulletPos = g_pMob[i]->GetBulletTranslateMatrix();
 			fBBullet_x[i] = mxMBulletPos._m[0][3];
 			fBBullet_y[i] = mxMBulletPos._m[1][3];
-
 			if (fPBullet_y > fMob_y[i] - 1.0f && fPBullet_y < fMob_y[i] + 1.0f &&
 				fPBullet_x < fMob_x[i] + 1.0f && fPBullet_x > fMob_x[i] - 1.0f) {
-				_MobAlive[i] = false;
+				g_pPlayer->DeleteBullet();
 				_MobSurvive -= 1;
-				cout << _MobSurvive << endl;
+				cout << _MobSurvive << " mobs are alived." << endl;
+				_MobAlive[i] = false;
 			}
 			if (_MobAlive[i] && fMob_y[i] < -7.f) //離開視窗死亡
 			{
 				_MobAlive[i] = false;
 				_MobSurvive -= 1;
-				cout << _MobSurvive << endl;
+				cout << _MobSurvive << " mobs are alived." << endl;
 			}
-			if (fBBullet_y[i] < PLAYER_Y_AXIS + 1.5f && fBBullet_y[i] > PLAYER_Y_AXIS - 1.5f &&
+			if (fBBullet_y[i] < PLAYER_Y_AXIS + 1.5f && fBBullet_y[i] > PLAYER_Y_AXIS +1.3f &&
 				fBBullet_x[i] < g_fPTx + 1.5f && fBBullet_x[i] > g_fPTx - 1.5f) {						//小怪子彈碰撞玩家
+				g_pMob[i]->DeleteBullet();
 				g_pPlayer->AttackedByEnemies(delta);
 			}
+			if (_MobSurvive == 0)_BossAlive = true;
 		}
 	}
 	
@@ -114,6 +120,10 @@ void GL_Display(void)
 	{
 		if (_MobAlive[i])g_pMob[i]->GL_Draw();
 	}
+	if (_BossAlive)
+	{
+		g_pBoss->GL_Draw();
+	}
 	
 	glutSwapBuffers();	// 交換 Frame Buffer
 }
@@ -125,11 +135,7 @@ void onFrameMove(float delta)
 	//小怪子彈
 	for (int i = 0; i < MOB_NUM; i++)
 	{
-		_fMcount += delta;
-		if (_fMcount < MOB_BULLET) g_pMob[i]->ShootBullet(delta);
-		else {
-			_fMcount -= MOB_BULLET;
-		}
+		g_pMob[i]->ShootBullet(delta);
 	}
 
 	g_pPlayer->UpdateMatrix(delta);

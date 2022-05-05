@@ -5,7 +5,6 @@
 
 #define X 5
 #define Y 7
-#define BULLET_NUM 2	//¤l¼u¼Æ¶q
 
 class CMob : public CEnemy
 {
@@ -30,4 +29,5 @@ public:
 
 	void CreateBulletList();
 	void ShootBullet(float delta);
+	void DeleteBullet();
 };

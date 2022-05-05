@@ -85,6 +85,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Common\CBG.cpp" />
+    <ClCompile Include="Common\CBoss.cpp" />
     <ClCompile Include="Common\CBullet.cpp" />
     <ClCompile Include="Common\CCQuad.cpp" />
     <ClCompile Include="Common\CEnemy.cpp" />
@@ -98,6 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common\CBG.h" />
+    <ClInclude Include="Common\CBoss.h" />
     <ClInclude Include="Common\CBullet.h" />
     <ClInclude Include="Common\CCQuad.h" />
     <ClInclude Include="Common\CEnemy.h" />

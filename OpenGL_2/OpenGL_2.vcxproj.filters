@@ -54,6 +54,9 @@
     <ClCompile Include="Common\CMob.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="Common\CBoss.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Header\Angel.h">
@@ -93,6 +96,9 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="Common\CMob.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\CBoss.h">
       <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>
