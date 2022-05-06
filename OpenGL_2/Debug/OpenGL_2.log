@@ -1,4 +1,7 @@
-﻿  CHealth.cpp
+﻿  game.cpp
+c:\users\方雁\downloads\計算機圖學\作業\opengl_2\game.cpp(60): warning C4305: '引數': 從 'double' 轉換為 'GLclampf'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+c:\users\方雁\downloads\計算機圖學\作業\opengl_2\game.cpp(197): warning C4390: ';': 找到空白的控制陳述式，是正確的嗎?
+c:\users\方雁\downloads\計算機圖學\作業\opengl_2\game.cpp(200): warning C4390: ';': 找到空白的控制陳述式，是正確的嗎?
   OpenGL_2.vcxproj -> C:\Users\方雁\Downloads\計算機圖學\作業\Debug\OpenGL_2.exe
   OpenGL_2.vcxproj -> C:\Users\方雁\Downloads\計算機圖學\作業\Debug\OpenGL_2.pdb (Full PDB)
   已複製 0 個檔案

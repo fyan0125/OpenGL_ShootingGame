@@ -3,6 +3,7 @@
 #include "Common/CBG.h"
 #include "Common/CMob.h"
 #include "Common/CBoss.h"
+#include "Common/CHealth.h"
 #include <stdlib.h>
 #include <vector>
 using namespace std;
@@ -20,6 +21,7 @@ CPlayer *g_pPlayer;
 CBG *g_pBG;
 CMob *g_pMob[MOB_NUM];
 CBoss *g_pBoss;
+CHealth *g_pBossHP;;
 
 GLfloat g_fPTx = 0;		//玩家座標
 mat4  mxPT, mxPS;
@@ -30,8 +32,10 @@ bool _Alive = true;
 bool _MobAlive[MOB_NUM];
 bool _BossAlive = false;
 
-int _MobSurvive = MOB_NUM;
 int _life = 4;
+int _MobSurvive = MOB_NUM;
+float g_fBossHPT[3] = { 0.0f, 6.95f , 0.0f };						//初始高度
+mat4 g_mxBossHPT;
 
 //----------------------------------------------------------------------------
 // 函式的原型宣告
@@ -50,6 +54,8 @@ void init(void)
 		_MobAlive[i] = true;
 	}
 	g_pBoss = new CBoss;
+	g_pBossHP = new CHealth(g_fBossHPT[1], 10.0f);	
+	g_pBossHP->SetColor(vec4(1.0f, 1.0f, 0.0f, 1));
 
 	glClearColor(0.0509, 0.0235, 0.1882, 1.0); // black background
 }
@@ -119,6 +125,11 @@ void Collision(float delta)
 		if (fPBullet_y > fBoss_y - 1.0f && fPBullet_y < fBoss_y + 1.0f&&
 			fPBullet_x < fBoss_x + 1.0f && fPBullet_x > fBoss_x - 1.0f) {
 			cout << "hit boss" << endl;
+			if (g_fBossHPT[0] > -5.0f) {
+				g_fBossHPT[0] -= delta;
+				g_mxBossHPT = Translate(g_fBossHPT[0], g_fBossHPT[1], g_fBossHPT[2]);
+				g_pBossHP->GL_SetTranslatMatrix(g_mxBossHPT);	//左移減血
+			}
 		}
 	}
 	
@@ -142,6 +153,7 @@ void GL_Display(void)
 	if (_BossAlive)
 	{
 		g_pBoss->GL_Draw();
+		g_pBossHP->GL_Draw();
 	}
 	
 	glutSwapBuffers();	// 交換 Frame Buffer
@@ -165,6 +177,7 @@ void onFrameMove(float delta)
 		g_pMob[i]->UpdateMatrix(delta);
 	}
 	g_pBoss->UpdateMatrix(delta);
+	g_pBossHP->UpdateMatrix(delta);
 	
 
 	Collision(delta);
