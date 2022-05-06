@@ -14,7 +14,7 @@ using namespace std;
 #define HALFY (SCREENY/2) 
 #define PLAYER_BULLET 0.45f
 #define MOB_BULLET 1.0f
-#define MOB_NUM 10
+#define MOB_NUM 1
 
 CPlayer *g_pPlayer;
 CBG *g_pBG;
@@ -51,18 +51,19 @@ void init(void)
 	}
 	g_pBoss = new CBoss;
 
-
-	glClearColor(0.0, 0.0, 0.0, 1.0); // black background
+	glClearColor(0.0509, 0.0235, 0.1882, 1.0); // black background
 }
 
 void Collision(float delta)
 {
-	mat4 mxPlayerPos, mxPBulletPos, mxMobPos, mxMBulletPos;
+	mat4 mxPlayerPos, mxPBulletPos, mxMobPos[MOB_NUM], mxMBulletPos[MOB_NUM], mxBossPos, mxBBulletPos;
 	float fPlayer_x, fPlayer_y;			//player position
 	float fPBullet_x, fPBullet_y;		//player bullet position
-	float fMob_x[MOB_NUM], fMob_y[MOB_NUM];				//boss position
-	float fBBullet_x[MOB_NUM], fBBullet_y[MOB_NUM];		//boss bullet position
-	
+	float fMob_x[MOB_NUM], fMob_y[MOB_NUM];				//mob position
+	float fMBullet_x[MOB_NUM], fMBullet_y[MOB_NUM];		//mob bullet position
+	float fBoss_x, fBoss_y;				//boss position
+	float fBBullet_x, fBBullet_y;		//boss bullet position
+
 	if (_Alive) {		//玩家存在
 		mxPlayerPos = g_pPlayer->GetTranslateMatrix();			//取得玩家位置
 		fPlayer_x = mxPlayerPos._m[0][3];
@@ -75,12 +76,13 @@ void Collision(float delta)
 	for (int i = 0; i < MOB_NUM; i++)
 	{
 		if (_MobAlive[i]) {
-			mxMobPos = g_pMob[i]->GetTranslateMatrix();
-			fMob_x[i] = mxMobPos._m[0][3];
-			fMob_y[i] = mxMobPos._m[1][3];
-			mxMBulletPos = g_pMob[i]->GetBulletTranslateMatrix();
-			fBBullet_x[i] = mxMBulletPos._m[0][3];
-			fBBullet_y[i] = mxMBulletPos._m[1][3];
+			mxMobPos[i] = g_pMob[i]->GetTranslateMatrix();
+			fMob_x[i] = mxMobPos[i]._m[0][3];
+			fMob_y[i] = mxMobPos[i]._m[1][3];
+			mxMBulletPos[i] = g_pMob[i]->GetBulletTranslateMatrix();
+			fMBullet_x[i] = mxMBulletPos[i]._m[0][3];
+			fMBullet_y[i] = mxMBulletPos[i]._m[1][3];
+			//玩家子彈擊中小怪
 			if (fPBullet_y > fMob_y[i] - 1.0f && fPBullet_y < fMob_y[i] + 1.0f &&
 				fPBullet_x < fMob_x[i] + 1.0f && fPBullet_x > fMob_x[i] - 1.0f) {
 				g_pPlayer->DeleteBullet();
@@ -88,18 +90,35 @@ void Collision(float delta)
 				cout << _MobSurvive << " mobs are alived." << endl;
 				_MobAlive[i] = false;
 			}
-			if (_MobAlive[i] && fMob_y[i] < -7.f) //離開視窗死亡
+			//離開視窗死亡
+			if (_MobAlive[i] && fMob_y[i] < -7.f)
 			{
 				_MobAlive[i] = false;
 				_MobSurvive -= 1;
 				cout << _MobSurvive << " mobs are alived." << endl;
 			}
-			if (fBBullet_y[i] < PLAYER_Y_AXIS + 1.5f && fBBullet_y[i] > PLAYER_Y_AXIS +1.3f &&
-				fBBullet_x[i] < g_fPTx + 1.5f && fBBullet_x[i] > g_fPTx - 1.5f) {						//小怪子彈碰撞玩家
+			//小怪子彈擊中玩家
+			if (fMBullet_y[i] < PLAYER_Y_AXIS + 1.5f && fMBullet_y[i] > PLAYER_Y_AXIS +1.3f &&
+				fMBullet_x[i] < g_fPTx + 1.5f && fMBullet_x[i] > g_fPTx - 1.5f) {						//小怪子彈碰撞玩家
 				g_pMob[i]->DeleteBullet();
 				g_pPlayer->AttackedByEnemies(delta);
 			}
 			if (_MobSurvive == 0)_BossAlive = true;
+		}
+	}
+
+	if (_BossAlive)
+	{
+		mxBossPos = g_pBoss->GetTranslateMatrix();
+		fBoss_x = mxBossPos._m[0][3];
+		fBoss_y = mxBossPos._m[1][3];
+		mxBBulletPos = g_pBoss->GetBulletTranslateMatrix();
+		fBBullet_x = mxBBulletPos._m[0][3];
+		fBBullet_y = mxBBulletPos._m[1][3];
+		//玩家子彈擊中BOSS
+		if (fPBullet_y > fBoss_y - 1.0f && fPBullet_y < fBoss_y + 1.0f&&
+			fPBullet_x < fBoss_x + 1.0f && fPBullet_x > fBoss_x - 1.0f) {
+			cout << "hit boss" << endl;
 		}
 	}
 	
@@ -137,6 +156,7 @@ void onFrameMove(float delta)
 	{
 		g_pMob[i]->ShootBullet(delta);
 	}
+	g_pBoss->ShootBullet(delta);
 
 	g_pPlayer->UpdateMatrix(delta);
 	g_pBG->UpdateMatrix(delta);

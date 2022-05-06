@@ -10,7 +10,7 @@ CMob::CMob()
 	if (RandomColor == 0) _pEnemy->setColor(vec4(1.0f, 0.0f, 0.0f, 1));		//隨機顏色
 	else if (RandomColor == 1) _pEnemy->setColor(vec4(0.0f, 1.0f, 0.0f, 1));
 	_fMT[0] = -X + (rand() % (X * 2) + (rand() % 10) * 0.1);	//x座標
-	_fMT[1] = -Y + (rand() % (Y * 2) + (rand() % 10) * 10);			//y座標
+	_fMT[1] = -Y + (rand() % 25 + (rand() % 10) * 10);			//y座標
 	_mxET = Translate(_fMT[0], _fMT[1], 0);
 	_pEnemy->setTRSMatrix(_mxET);
 	CreateBulletList();

@@ -6,14 +6,14 @@ CBullet::CBullet() //Player  Bullet
 	_isShoot = false;
 	_fBulletSpeed = 30.f;
 
-	_pBullet = new CCQuad();
-	_pBullet->setColor(vec4(1.0f, 1.0f, 1.0f, 1));
+	_pBullet = new CCQuad(1);
+	_pBullet->setColor(vec4(0.9019f, 0.9764f, 0.6862f, 1));
 	_pBullet->setShaderName("vsVtxColor.glsl", "fsVtxColor.glsl");
 	_pBullet->setShader(g_mxModelView, g_mxProjection);
 
 	_fBT[1] = PLAYER_Y_AXIS;
 	_mxBT = Translate(-20, _fBT[1], _fBT[2]);
-	_fscale = 0.3f;
+	_fscale = 0.03f;
 	_mxBS = Scale(_fscale, _fscale, _fscale);
 	_pBullet->setTRSMatrix(_mxBT*_mxBS);
 }
@@ -24,9 +24,6 @@ CBullet::CBullet(float y) //Enemy  Bullet
 	_fBulletSpeed = -30.f;
 
 	_pBullet = new CCQuad();
-	_pBullet->setColor(vec4(1.0f, 1.0f, 1.0f, 1));
-	_pBullet->setShaderName("vsVtxColor.glsl", "fsVtxColor.glsl");
-	_pBullet->setShader(g_mxModelView, g_mxProjection);
 
 	_fBT[1] = y;
 	_mxBT = Translate(_fBT[0], _fBT[1], _fBT[2]);

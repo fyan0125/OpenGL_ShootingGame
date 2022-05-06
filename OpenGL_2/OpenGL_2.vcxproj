@@ -89,6 +89,7 @@
     <ClCompile Include="Common\CBullet.cpp" />
     <ClCompile Include="Common\CCQuad.cpp" />
     <ClCompile Include="Common\CEnemy.cpp" />
+    <ClCompile Include="Common\CHealth.cpp" />
     <ClCompile Include="Common\CMob.cpp" />
     <ClCompile Include="Common\common.cpp" />
     <ClCompile Include="Common\CPlayer.cpp" />
@@ -103,6 +104,7 @@
     <ClInclude Include="Common\CBullet.h" />
     <ClInclude Include="Common\CCQuad.h" />
     <ClInclude Include="Common\CEnemy.h" />
+    <ClInclude Include="Common\CHealth.h" />
     <ClInclude Include="Common\CMob.h" />
     <ClInclude Include="Common\CPlayer.h" />
     <ClInclude Include="Common\CShape.h" />
