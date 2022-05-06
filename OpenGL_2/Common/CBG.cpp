@@ -14,7 +14,7 @@ CBG::CBG()
 		_fBGT[i][1] = -Y + (rand() % (Y * 2) + (rand() % 10)*0.1);	//y®y¼Ð
 		_fBGT[i][2] = -5;				
 		_mxBGT = Translate(_fBGT[i][0], _fBGT[i][1], _fBGT[i][2]);
-		_fBGScale = 0.05f;
+		_fBGScale = 0.03f;
 		_mxBGS = Scale(_fBGScale, _fBGScale, _fBGScale);
 		_pBG[i]->setTRSMatrix(_mxBGT*_mxBGS);
 	}

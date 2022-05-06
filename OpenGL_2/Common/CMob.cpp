@@ -4,15 +4,18 @@
 CMob::CMob()
 {
 	int RandomColor = rand() % 2;
-	_pEnemy = new CCQuad();
+	_pEnemy = new CCQuad(3);
 	_pEnemy->setShaderName("vsVtxColor.glsl", "fsVtxColor.glsl");
 	_pEnemy->setShader(g_mxModelView, g_mxProjection);
-	if (RandomColor == 0) _pEnemy->setColor(vec4(1.0f, 0.0f, 0.0f, 1));		//隨機顏色
-	else if (RandomColor == 1) _pEnemy->setColor(vec4(0.0f, 1.0f, 0.0f, 1));
+	if (RandomColor == 0) _pEnemy->setColor(vec4(0.0f, 0.6235f, 0.7176f, 1), vec4(0.9529f, 0.9529f, 0.9529f, 1.0f));		//隨機顏色
+	else if (RandomColor == 1) _pEnemy->setColor(vec4(0.9960f, 0.8431f, 0.4f, 1), vec4(0.9529f, 0.9529f, 0.9529f, 1.0f));
 	_fMT[0] = -X + (rand() % (X * 2) + (rand() % 10) * 0.1);	//x座標
 	_fMT[1] = -Y + (rand() % 25 + (rand() % 10) * 10);			//y座標
 	_mxET = Translate(_fMT[0], _fMT[1], 0);
-	_pEnemy->setTRSMatrix(_mxET);
+	_mxMR = RotateZ(180.0f);
+	_fscale = 0.15f;
+	_mxMS = Scale(_fscale, _fscale, _fscale);
+	_pEnemy->setTRSMatrix(_mxET * _mxMS * _mxMR);
 	CreateBulletList();
 }
 
@@ -26,7 +29,7 @@ void CMob::UpdateMatrix(float delta, int status)
 {
 	_fMT[1] -= delta * _fMSpeed;	//y座標
 	_mxET = Translate(_fMT[0], _fMT[1], _fMT[2]);
-	_pEnemy->setTRSMatrix(_mxET);
+	_pEnemy->setTRSMatrix(_mxET * _mxMS * _mxMR);
 }
 void CMob::GL_Draw()
 {

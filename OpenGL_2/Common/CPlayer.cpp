@@ -16,12 +16,14 @@ CPlayer::CPlayer()
 	_AngleSpeed = 0;
 	float fDEscale = 0.3f;
 	for (int i = 0; i < MASK_NUM; i++) {
-		_pMask[i] = new CCQuad();
-		_pMask[i]->setColor(vec4(1.0f, 1.0f, 0.0f, 1.0f));
+		_pMask[i] = new CCQuad(1);
+		_pMask[i]->setColor(vec4(0.8901f, 0.6570f, 0.5294f, 1.0f));
 		_pMask[i]->setShaderName("vsVtxColor.glsl", "fsVtxColor.glsl");
 		_pMask[i]->setShader(g_mxModelView, g_mxProjection);
 		_mxMask[i] = Translate(MASK_RADIUS * cosf(M_PI*2.0f*i / MASK_NUM), MASK_RADIUS * sinf(M_PI*2.0f*i / MASK_NUM), 0.0f);
-		_pMask[i]->setTRSMatrix(_mxPT * _mxMask[i] * _mxPS);
+		_fMscale = 0.05f;
+		_mxMS = Scale(_fMscale, _fMscale, _fMscale);
+		_pMask[i]->setTRSMatrix(_mxPT * _mxMask[i] * _mxMS);
 	}
 
 	CreateBulletList();	//¤l¼u
@@ -52,7 +54,7 @@ void CPlayer::UpdateMatrix(float delta)
 	if (_AngleSpeed > 360) _AngleSpeed -= 360;
 	for (int i = 0; i < _MaskNum; i++) {
 		mxMa[i] = RotateZ(_AngleSpeed);
-		_pMask[i]->setTRSMatrix(_mxPT * mxMa[i] * _mxMask[i] * _mxPS);
+		_pMask[i]->setTRSMatrix(_mxPT * mxMa[i] * _mxMask[i] * _mxMS);
 	}
 }
 
@@ -77,7 +79,6 @@ void CPlayer::AttackedByEnemies(float delta)
 	if (updates >= 300) {
 		_MaskNum -= 1;
 		updates = 0;
-		cout << _MaskNum << endl;
 	}
 	updates++;
 }

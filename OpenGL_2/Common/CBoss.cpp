@@ -3,12 +3,11 @@
 
 CBoss::CBoss()
 {
-	int RandomColor = rand() % 2;
-	_pEnemy = new CCQuad();
+	
+	_pEnemy = new CCQuad(4);
 	_pEnemy->setShaderName("vsVtxColor.glsl", "fsVtxColor.glsl");
 	_pEnemy->setShader(g_mxModelView, g_mxProjection);
-	if (RandomColor == 0) _pEnemy->setColor(vec4(1.0f, 0.0f, 0.0f, 1));		//ÀH¾÷ÃC¦â
-	else if (RandomColor == 1) _pEnemy->setColor(vec4(0.0f, 1.0f, 0.0f, 1));
+	
 	_fMT[1] = 14;		//y®y¼Ð
 	_mxET = Translate(0, _fMT[1], 0);
 	_pEnemy->setTRSMatrix(_mxET);

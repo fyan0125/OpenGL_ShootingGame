@@ -13,7 +13,8 @@ protected:
 	mat4 g_mxProjection = Ortho(-5.0f, 5.0f, -7.0f, 7.0f, -12.0f, 12.0f);
 
 	float _fMT[3] = { 0 };
-	mat4 _mxMT;
+	float _fscale = 1;
+	mat4 _mxMT, _mxMS, _mxMR;
 
 public:
 

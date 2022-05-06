@@ -51,6 +51,7 @@ public:
 	void setProjectionMatrix(mat4& mat);
 	void setTRSMatrix(mat4& mat);
 	void setColor(vec4 vColor); // Single color
+	void setColor(vec4 vColor1, vec4 vColor2);
 
 	virtual void draw() = 0;
 	virtual void drawW() = 0; // Drawing without setting shaders

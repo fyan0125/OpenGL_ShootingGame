@@ -250,6 +250,11 @@ void Win_Keyboard(unsigned char key, int x, int y)
 	case 033:
 		if (g_pPlayer != nullptr) delete g_pPlayer;
 		if (g_pBG != nullptr) delete g_pBG;
+		for (int i = 0; i < MOB_NUM; i++) {
+			if (g_pMob[i] != nullptr) delete g_pMob[i];
+		}
+		if (g_pBoss != nullptr) delete g_pBoss;
+		if (g_pBossHP != nullptr) delete g_pBossHP;
 		exit(EXIT_SUCCESS);
 		break;
 	}

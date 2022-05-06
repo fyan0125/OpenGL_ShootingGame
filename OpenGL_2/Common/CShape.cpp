@@ -116,6 +116,30 @@ void CShape::setColor(vec4 vColor)
 	glBufferSubData(GL_ARRAY_BUFFER, _nVtx * sizeof(vec4), _nVtx * sizeof(vec4), _Colors);
 }
 
+void CShape::setColor(vec4 vColor1, vec4 vColor2)
+{
+	_fColor[0] = vColor1.x; _fColor[1] = vColor1.y;
+	_fColor[2] = vColor1.z; _fColor[3] = vColor1.w;
+
+	for (int i = 0; i < 3; i++) {
+		_Colors[i].x = _fColor[0];
+		_Colors[i].y = _fColor[1];
+		_Colors[i].z = _fColor[2];
+		_Colors[i].w = _fColor[3];
+	}
+
+	_fColor[0] = vColor2.x; _fColor[1] = vColor2.y;
+	_fColor[2] = vColor2.z; _fColor[3] = vColor2.w;
+	for (int i = 3; i < _nVtx; i++) {
+		_Colors[i].x = _fColor[0];
+		_Colors[i].y = _fColor[1];
+		_Colors[i].z = _fColor[2];
+		_Colors[i].w = _fColor[3];
+	}
+	glBindBuffer(GL_ARRAY_BUFFER, _uiBuffer);
+	glBufferSubData(GL_ARRAY_BUFFER, _nVtx * sizeof(vec4), _nVtx * sizeof(vec4), _Colors);
+}
+
 mat4 CShape::GetTRSMatrix()
 {
 	return _mxTRS;

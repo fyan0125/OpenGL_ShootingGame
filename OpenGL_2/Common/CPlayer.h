@@ -25,8 +25,9 @@ protected:
 	float _fscale = 1;
 	mat4 _mxPT, _mxPS;
 
-	GLfloat _AngleSpeed;						
-	mat4 _mxMask[MASK_NUM];				
+	GLfloat _AngleSpeed;		
+	float _fMscale = 1;
+	mat4 _mxMask[MASK_NUM], _mxMS;
 
 	// Bullet List
 	mat4 _mxBT;
