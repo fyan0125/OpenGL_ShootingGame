@@ -7,7 +7,7 @@
 using namespace std;
 
 #define PLAYER_Y_AXIS -5.0f			//ª±®aY¶b¦ì¸m
-#define MASK_NUM 3				//¨¾Å@¸n¼Æ¶q
+#define MASK_NUM 5				//¨¾Å@¸n¼Æ¶q
 #define MASK_RADIUS 1.5f				//¨¾Å@¸n  ¶ZÂ÷¥b®|
 
 class CPlayer
@@ -16,7 +16,7 @@ protected:
 	mat4 g_mxModelView = 1.0f;
 	mat4 g_mxProjection = Ortho(-5.0f, 5.0f, -7.0f, 7.0f, -12.0f, 12.0f);
 
-	int _MaskNum = 3;
+	int _MaskNum = 5;
 
 	CCQuad *_pPlayer;
 	CCQuad *_pMask[MASK_NUM];
@@ -47,6 +47,7 @@ public:
 	mat4 GetBulletTranslateMatrix();
 	float GetPlayerScale();
 	void AttackedByEnemies(float delta);
+	int GetMaskNum();
 
 	void CreateBulletList();
 	void ShootBullet(float delta, float passive_x);

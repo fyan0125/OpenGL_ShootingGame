@@ -75,6 +75,10 @@ void Collision(float delta)
 		mxPBulletPos = g_pPlayer->GetBulletTranslateMatrix();	//取得玩家子彈位置
 		fPBullet_x = mxPBulletPos._m[0][3];
 		fPBullet_y = mxPBulletPos._m[1][3];
+		if (g_pPlayer->GetMaskNum() < 0)
+		{
+			_Alive = false;
+		}
 	}
 
 	for (int i = 0; i < MOB_NUM; i++)

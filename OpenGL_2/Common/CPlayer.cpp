@@ -82,6 +82,11 @@ void CPlayer::AttackedByEnemies(float delta)
 	updates++;
 }
 
+int CPlayer::GetMaskNum()
+{
+	return _MaskNum;
+}
+
 void CPlayer::GL_DrawMask()
 {
 	for (int i = 0; i < _MaskNum; i++) _pMask[i]->draw();
