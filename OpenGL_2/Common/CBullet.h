@@ -27,7 +27,7 @@ public:
 	void GL_SetTRSMatrix(mat4 &mat);
 
 	void PlayerShoot(float delta, float passive_x);
-	void ShootBulletDown(float delta, float passive_x, float passive_y, mat4 &mxS);
+	void EnemyShoot(float delta, float passive_x, float passive_y, mat4 &mxS);
 
 	mat4 GetTranslateMatrix();
 	mat4 GetTRSMatrix();

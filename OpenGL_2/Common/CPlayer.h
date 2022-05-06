@@ -51,7 +51,7 @@ public:
 	int GetMaskNum();
 
 	void CreateBulletList();
-	void ShootBullet(float delta, float passive_x);
+	void ShootBullet(float delta, float passive_x, int bullet_time);
 	void DeleteBullet();
 };
 #endif

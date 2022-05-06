@@ -1,3 +1,25 @@
+//(8 % ) 操控與背景部分
+//		(1 % ) 滑鼠可以控制戰鬥機的左右移動V
+//		(1 % ) 戰鬥機傭有防禦裝置，並以父子關係方式呈現V
+//		(1 % ) 可以發射飛彈V
+//		(3 % ) 能提供連續發射(LINKED LIST，自己撰寫，使用STL 2分)V
+//		(2 % )  能產生有速度感的背景物件，或是其他裝飾性的物件V
+//(11 % ) 敵人部分
+//		(2 % )  有至少三種以上不同外形的敵人(不同的顏色)，基本的四方型不算在內V
+//		(3 % ) 以物件導向的多型來控制所有的敵人V
+//		(1 % )  敵人可以不斷的產生，而且具有不同的顏色V
+//		(1 % )  敵人能隨機朝向玩家發射子彈攻擊V
+//		(2 % )  戰鬥機發射的子彈可以打到敵人，而且敵人會消失V
+//		(2 % )  有 BOSS 級的敵人，且至會根據被攻擊的多寡至少三種不同的狀態(外型改變或攻擊方式)可以切換V
+//(4 % ) (玩家部分)
+//		(2 % )  能判斷玩家是否被打中 並做出合理的反應V
+//		(2 % )  玩家的船艦至少有三種狀態(外型改變)，且有提供玩家的船艦可改變狀態的機制
+//(8 % ) 其他你覺得可以展示的技術，包含物理或是數學的運算
+//		(2 % )提供階層式動態控制，並以時間為基礎進行動態的展示(如: OpenGL_2 的 Example4 ，以自動產生的軌跡去控制相關的物件運動)
+//		(2 % )發射導向飛彈攻擊移動的 Boss
+//		敵人被打到有其他的效果
+//		戰鬥機被打到時有其他的效果
+//		背景除了速度感物件外，有其他的效果
 #include "header/Angel.h"
 #include "Common/CPlayer.h"
 #include "Common/CBG.h"
@@ -13,9 +35,7 @@ using namespace std;
 #define SCREENY 800
 #define HALFX (SCREENX/2) 
 #define HALFY (SCREENY/2) 
-#define PLAYER_BULLET 0.45f
-#define MOB_BULLET 1.0f
-#define MOB_NUM 10
+#define MOB_NUM 15
 
 CPlayer *g_pPlayer;
 CBG *g_pBG;
@@ -31,10 +51,13 @@ bool _MobAlive[MOB_NUM];
 bool _BossAlive = false;
 
 int _MobSurvive = MOB_NUM;
-float g_fBossHPT[3] = { 0.0f, 6.95f , 0.0f };						//初始高度
+float g_fBossHPT[3] = { 0.0f, 6.95f , 0.0f };
 mat4 g_mxBossHPT;
 int _MobStatus = 1;
 int _BossStatus = 1;
+
+int _killedMob = 0;
+int _playerBulletTime = 700;
 
 //----------------------------------------------------------------------------
 // 函式的原型宣告
@@ -55,7 +78,7 @@ void init(void)
 	g_pBoss = new CBoss;
 	g_pBossHP = new CHealth;
 
-	glClearColor(0.0509, 0.0235, 0.1882, 1.0); // black background
+	glClearColor(0.0509, 0.0235, 0.1882, 1.0);
 }
 
 void Collision(float delta)
@@ -75,10 +98,11 @@ void Collision(float delta)
 		mxPBulletPos = g_pPlayer->GetBulletTranslateMatrix();	//取得玩家子彈位置
 		fPBullet_x = mxPBulletPos._m[0][3];
 		fPBullet_y = mxPBulletPos._m[1][3];
-		if (g_pPlayer->GetMaskNum() < 0)
+		if (_killedMob >= 5)
 		{
-			_Alive = false;
+			_playerBulletTime = 300;
 		}
+		if (g_pPlayer->GetMaskNum() < 0)_Alive = false;
 	}
 
 	for (int i = 0; i < MOB_NUM; i++)
@@ -91,13 +115,18 @@ void Collision(float delta)
 			fMBullet_x[i] = mxMBulletPos[i]._m[0][3];
 			fMBullet_y[i] = mxMBulletPos[i]._m[1][3];
 			//玩家子彈擊中小怪
-			if (fPBullet_y > fMob_y[i] - 1.0f && fPBullet_y < fMob_y[i] + 1.0f &&
-				fPBullet_x < fMob_x[i] + 1.0f && fPBullet_x > fMob_x[i] - 1.0f) {
-				g_pPlayer->DeleteBullet();
-				_MobSurvive -= 1;
-				cout << _MobSurvive << " mobs are alived." << endl;
-				_MobAlive[i] = false;
+			if (fMob_y[i] < 7.0f)
+			{
+				if (fPBullet_y > fMob_y[i] - 1.0f && fPBullet_y < fMob_y[i] + 1.0f &&
+					fPBullet_x < fMob_x[i] + 1.0f && fPBullet_x > fMob_x[i] - 1.0f) {
+					g_pPlayer->DeleteBullet();
+					_MobSurvive -= 1;
+					cout << _MobSurvive << " mobs are alived." << endl;
+					_MobAlive[i] = false;
+					_killedMob += 1;
+				}
 			}
+			
 			//離開視窗死亡
 			if (_MobAlive[i] && fMob_y[i] < -7.f)
 			{
@@ -156,10 +185,7 @@ void GL_Display(void)
 		g_pPlayer->GL_Draw();
 		g_pPlayer->GL_DrawMask();
 	}
-	for (int i = 0; i < MOB_NUM; i++)
-	{
-		if (_MobAlive[i])g_pMob[i]->GL_Draw();
-	}
+	for (int i = 0; i < MOB_NUM; i++)if (_MobAlive[i])g_pMob[i]->GL_Draw();
 	if (_BossAlive)
 	{
 		g_pBoss->GL_Draw();
@@ -172,20 +198,14 @@ void GL_Display(void)
 void onFrameMove(float delta)
 {
 	//玩家子彈
-	g_pPlayer->ShootBullet(delta, g_fPTx);	//發射子彈
+	g_pPlayer->ShootBullet(delta, g_fPTx, _playerBulletTime);	//發射子彈
 	//小怪子彈
-	for (int i = 0; i < MOB_NUM; i++)
-	{
-		g_pMob[i]->ShootBullet(delta);
-	}
+	for (int i = 0; i < MOB_NUM; i++)g_pMob[i]->ShootBullet(delta);
 	g_pBoss->ShootBullet(delta);
 
 	g_pPlayer->UpdateMatrix(delta);
 	g_pBG->UpdateMatrix(delta);
-	for (int i = 0; i < MOB_NUM; i++)
-	{
-		g_pMob[i]->UpdateMatrix(delta, _MobStatus);
-	}
+	for (int i = 0; i < MOB_NUM; i++)g_pMob[i]->UpdateMatrix(delta, _MobStatus);
 	g_pBoss->UpdateMatrix(delta, _BossStatus);
 	g_pBossHP->UpdateMatrix(delta);
 	
@@ -223,7 +243,6 @@ void Win_PassiveMotion(int x, int y) {
 	mxPS = Scale(fPlayerScale, fPlayerScale, fPlayerScale);	//大小
 	g_pPlayer->GL_SetTRSMatrix(mxPT * mxPS);
 	g_pPlayer->GL_SetTranslatMatrix(mxPT);
-	
 }
 // The motion callback for a window is called when the mouse moves within the window while one or more mouse buttons are pressed.
 void Win_MouseMotion(int x, int y) {

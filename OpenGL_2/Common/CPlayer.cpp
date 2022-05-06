@@ -110,10 +110,10 @@ void CPlayer::CreateBulletList()
 	ballsAry = new vector<CBullet *>;
 }
 
-void CPlayer::ShootBullet(float delta, float passive_x)
+void CPlayer::ShootBullet(float delta, float passive_x, int bullet_time)
 {
 	static int updates = 0;
-	if (updates >= 500) {
+	if (updates >= bullet_time) {
 		CBullet *ball = new CBullet;
 		ballsAry->push_back(ball);
 		updates = 0;

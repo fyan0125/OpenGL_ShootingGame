@@ -14,11 +14,11 @@ protected:
 
 	float _fMT[3] = { 0 };
 	float _fscale = 1;
-	mat4 _mxMT, _mxMS, _mxMR;
+	mat4 _mxMS, _mxMR;
 
 public:
 
-	float _fMSpeed = 20.0f;					//路徑速度
+	float _fMSpeed = 1.0f;					//路徑速度
 
 	CMob();
 	~CMob();
@@ -26,7 +26,6 @@ public:
 	void UpdateMatrix(float, int);			//更新運動
 	void GL_Draw();
 	void GL_SetTRSMatrix(mat4 &mat);
-	void SetColor(int RandomColor);				//設定小怪顏色
 
 	void CreateBulletList();
 	void ShootBullet(float delta);

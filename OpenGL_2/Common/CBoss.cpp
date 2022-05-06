@@ -8,9 +8,11 @@ CBoss::CBoss()
 	_pEnemy->setShaderName("vsVtxColor.glsl", "fsVtxColor.glsl");
 	_pEnemy->setShader(g_mxModelView, g_mxProjection);
 	
-	_fMT[1] = 14;		//y座標
-	_mxET = Translate(0, _fMT[1], 0);
-	_pEnemy->setTRSMatrix(_mxET);
+	_fBossT[1] = 14;		//y座標
+	_mxET = Translate(0, _fBossT[1], 0);
+	_fscale = 0.15f;
+	_mxBossS = Scale(_fscale, _fscale, _fscale);
+	_pEnemy->setTRSMatrix(_mxET * _mxBossS);
 	CreateBulletList();
 }
 
@@ -24,9 +26,9 @@ void CBoss::UpdateMatrix(float delta, int BossStatus)
 {
 	if (first)
 	{
-		_fMT[1] -= delta * _fMSpeed;	//y座標
-		_mxET = Translate(_fMT[0], _fMT[1], _fMT[2]);
-		if (_fMT[1] < 6)first = false;
+		_fBossT[1] -= delta * _fMSpeed;	//y座標
+		_mxET = Translate(_fBossT[0], _fBossT[1], _fBossT[2]);
+		if (_fBossT[1] < 6)first = false;
 	}
 	else
 	{
@@ -39,25 +41,25 @@ void CBoss::UpdateMatrix(float delta, int BossStatus)
 		float cost2 = cosf(_fMAngle_Track / 2.f);
 		if (BossStatus == 1)
 		{
-			_fMT[0] = (cost2 * sint) * 4;
-			_fMT[1] = (cost2)+5.0f;
-			_mxET = Translate(_fMT[0], _fMT[1], _fMT[2]);
+			_fBossT[0] = (cost2 * sint) * 4;
+			_fBossT[1] = (cost2)+5.0f;
+			_mxET = Translate(_fBossT[0], _fBossT[1], _fBossT[2]);
 		}
 		else if (BossStatus == 2)
 		{
-			_fMT[0] = cost2 * 4;
-			_fMT[1] = sint + 5.0f;
-			_mxET = Translate(_fMT[0], _fMT[1], _fMT[2]);
+			_fBossT[0] = cost2 * 4;
+			_fBossT[1] = sint + 5.0f;
+			_mxET = Translate(_fBossT[0], _fBossT[1], _fBossT[2]);
 		}
 		else if (BossStatus == 3)
 		{
-			_fMT[0] = cost2 * 4;
-			_fMT[1] = sin2t + 5.0f;
-			_mxET = Translate(_fMT[0], _fMT[1], _fMT[2]);
+			_fBossT[0] = cost2 * 4;
+			_fBossT[1] = sin2t + 5.0f;
+			_mxET = Translate(_fBossT[0], _fBossT[1], _fBossT[2]);
 		}
 	}
 	
-	_pEnemy->setTRSMatrix(_mxET);
+	_pEnemy->setTRSMatrix(_mxET * _mxBossS);
 }
 
 void CBoss::GL_Draw()
@@ -79,16 +81,6 @@ void CBoss::GL_SetTRSMatrix(mat4 &mat)
 	_pEnemy->setTRSMatrix(mat);
 }
 
-//----------------------------------------------
-
-void CBoss::SetColor(int RandomColor)
-{
-	//LE
-	if (RandomColor == 0) _pEnemy->setColor(vec4(-1.0f, 0.0f, 0.0f, 1));		//隨機顏色
-	else if (RandomColor == 1) _pEnemy->setColor(vec4(0.0f, -1.0f, 0.0f, 1));
-	else _pEnemy->setColor(vec4(0.0f, 0.0f, -1.0f, 1));
-}
-
 void CBoss::CreateBulletList()
 {
 	ballsAry = new vector<CBullet *>;
@@ -97,7 +89,7 @@ void CBoss::CreateBulletList()
 void CBoss::ShootBullet(float delta)
 {
 	static int updates = 0;
-	if (_fMT[1] <= 7.0f && _fMT[1] >= -7.0f)
+	if (_fBossT[1] <= 7.0f && _fBossT[1] >= -7.0f)
 	{
 		if (updates >= 2000) {
 			CBullet *ball = new CBullet;
@@ -111,7 +103,7 @@ void CBoss::ShootBullet(float delta)
 	for (vector<CBullet *>::iterator spriteIterator = ballsAry->begin();
 		spriteIterator != ballsAry->end(); spriteIterator++)
 	{
-		(*spriteIterator)->ShootBulletDown(delta, _fMT[0], _fMT[1], _mxBS);
+		(*spriteIterator)->EnemyShoot(delta, _fBossT[0], _fBossT[1], _mxBS);
 		_mxBT = (*spriteIterator)->GetTranslateMatrix();
 	}
 

@@ -10,7 +10,7 @@ CMob::CMob()
 	if (RandomColor == 0) _pEnemy->setColor(vec4(0.0f, 0.6235f, 0.7176f, 1), vec4(0.9529f, 0.9529f, 0.9529f, 1.0f));		//隨機顏色
 	else if (RandomColor == 1) _pEnemy->setColor(vec4(0.9960f, 0.8431f, 0.4f, 1), vec4(0.9529f, 0.9529f, 0.9529f, 1.0f));
 	_fMT[0] = -X + (rand() % (X * 2) + (rand() % 10) * 0.1);	//x座標
-	_fMT[1] = -Y + (rand() % 25 + (rand() % 10) * 10);			//y座標
+	_fMT[1] = Y + (rand() % 25 + (rand() % 10) * 5);			//y座標
 	_mxET = Translate(_fMT[0], _fMT[1], 0);
 	_mxMR = RotateZ(180.0f);
 	_fscale = 0.15f;
@@ -50,16 +50,6 @@ void CMob::GL_SetTRSMatrix(mat4 &mat)
 	_pEnemy->setTRSMatrix(mat);
 }
 
-//----------------------------------------------
-
-void CMob::SetColor(int RandomColor)
-{
-	//LE
-	if (RandomColor == 0) _pEnemy->setColor(vec4(-1.0f, 0.0f, 0.0f, 1));		//隨機顏色
-	else if (RandomColor == 1) _pEnemy->setColor(vec4(0.0f, -1.0f, 0.0f, 1));
-	else _pEnemy->setColor(vec4(0.0f, 0.0f, -1.0f, 1));
-}
-
 void CMob::CreateBulletList()
 {
 	ballsAry = new vector<CBullet *>;
@@ -82,7 +72,7 @@ void CMob::ShootBullet(float delta)
 	for (vector<CBullet *>::iterator spriteIterator = ballsAry->begin();
 		spriteIterator != ballsAry->end(); spriteIterator++)
 	{
-		(*spriteIterator)->ShootBulletDown(delta, _fMT[0], _fMT[1], _mxBS);
+		(*spriteIterator)->EnemyShoot(delta, _fMT[0], _fMT[1], _mxBS);
 		_mxBT = (*spriteIterator)->GetTranslateMatrix();
 	}
 

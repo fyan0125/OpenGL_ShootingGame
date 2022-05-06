@@ -175,9 +175,9 @@ CCQuad::CCQuad(int objectID)
 
 		
 		_Colors = new vec4[_nVtx];
-		for (int i = 0; i < 30; i++) _Colors[i] = vec4(0.0f, 1.0f, 1.0f, 1.0f);
-		for (int i = 30; i < 51; i++) _Colors[i] = vec4(1.0f, 0.0f, 1.0f, 1.0f);
-		for (int i = 51; i < _nVtx; i++) _Colors[i] = vec4(1.0f, 1.0f, 0.0f, 1.0f);
+		for (int i = 0; i < 30; i++) _Colors[i] = vec4(0.9529f, 0.9529f, 0.9529f, 1.0f);
+		for (int i = 30; i < 51; i++) _Colors[i] = vec4(0.9803f, 0.9803f, 0.9803f, 1.0f);
+		for (int i = 51; i < _nVtx; i++) _Colors[i] = vec4(0.2f, 0.6f, 0.5372f, 1.0f);
 		break;
 	}
 	

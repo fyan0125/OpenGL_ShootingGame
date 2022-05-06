@@ -63,7 +63,7 @@ void CBullet::PlayerShoot(float delta, float passive_x)
 	_pBullet->setTRSMatrix(_mxBT*_mxBS);
 }
 
-void CBullet::ShootBulletDown(float delta, float passive_x, float passive_y, mat4 &mxS) //向下發射子彈
+void CBullet::EnemyShoot(float delta, float passive_x, float passive_y, mat4 &mxS) //向下發射子彈
 {
 	if (!_isShoot) {		//固定發射時的x座標
 		_fBT[0] = passive_x;
@@ -72,7 +72,7 @@ void CBullet::ShootBulletDown(float delta, float passive_x, float passive_y, mat
 	}
 	_fBT[1] -= delta * _fBulletSpeed;
 	_mxBT = Translate(_fBT[0], _fBT[1], _fBT[2]);
-	_pBullet->setTRSMatrix(_mxBT * mxS*_mxBS);
+	_pBullet->setTRSMatrix(_mxBT * mxS * _mxBS);
 }
 
 //------------------------------------------------
