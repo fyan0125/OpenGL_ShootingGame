@@ -75,21 +75,6 @@ void CBullet::ShootBulletDown(float delta, float passive_x, float passive_y, mat
 	_pBullet->setTRSMatrix(_mxBT * mxS*_mxBS);
 }
 
-void CBullet::ResetBullet(float fPTx)
-{
-	_fBT[0] = -20;
-	_fBT[1] = PLAYER_Y_AXIS;
-	_mxBT = Translate(_fBT[0], _fBT[1], _fBT[2]);
-	_pBullet->setTRSMatrix(_mxBT);
-}
-
-void CBullet::ResetBullet(mat4 &mat, float x, float y)
-{
-	_fBT[0] = x; _fBT[1] = y;
-	_mxBT = Translate(_fBT[0], _fBT[1], _fBT[2]);
-	_pBullet->setTRSMatrix(_mxBT * mat);
-}
-
 //------------------------------------------------
 mat4 CBullet::GetTranslateMatrix()
 {
@@ -101,7 +86,7 @@ mat4 CBullet::GetTRSMatrix()
 	return(_pBullet->GetTRSMatrix());
 }
 
-float CBullet::getPosition()
+float CBullet::GetBulletPosition()
 {
 	float y;
 	y = _mxBT._m[1][3];

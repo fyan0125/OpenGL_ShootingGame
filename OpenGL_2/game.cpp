@@ -15,7 +15,7 @@ using namespace std;
 #define HALFY (SCREENY/2) 
 #define PLAYER_BULLET 0.45f
 #define MOB_BULLET 1.0f
-#define MOB_NUM 1
+#define MOB_NUM 10
 
 CPlayer *g_pPlayer;
 CBG *g_pBG;
@@ -25,17 +25,16 @@ CHealth *g_pBossHP;;
 
 GLfloat g_fPTx = 0;		//玩家座標
 mat4  mxPT, mxPS;
-float _fcount = 0;		//玩家子彈間隔時間
-float _fMcount = 0;
 
 bool _Alive = true;
 bool _MobAlive[MOB_NUM];
 bool _BossAlive = false;
 
-int _life = 4;
 int _MobSurvive = MOB_NUM;
 float g_fBossHPT[3] = { 0.0f, 6.95f , 0.0f };						//初始高度
 mat4 g_mxBossHPT;
+int _MobStatus = 1;
+int _BossStatus = 1;
 
 //----------------------------------------------------------------------------
 // 函式的原型宣告
@@ -54,8 +53,7 @@ void init(void)
 		_MobAlive[i] = true;
 	}
 	g_pBoss = new CBoss;
-	g_pBossHP = new CHealth(g_fBossHPT[1], 10.0f);	
-	g_pBossHP->SetColor(vec4(1.0f, 1.0f, 0.0f, 1));
+	g_pBossHP = new CHealth;
 
 	glClearColor(0.0509, 0.0235, 0.1882, 1.0); // black background
 }
@@ -124,12 +122,20 @@ void Collision(float delta)
 		//玩家子彈擊中BOSS
 		if (fPBullet_y > fBoss_y - 1.0f && fPBullet_y < fBoss_y + 1.0f&&
 			fPBullet_x < fBoss_x + 1.0f && fPBullet_x > fBoss_x - 1.0f) {
-			cout << "hit boss" << endl;
-			if (g_fBossHPT[0] > -5.0f) {
-				g_fBossHPT[0] -= delta;
-				g_mxBossHPT = Translate(g_fBossHPT[0], g_fBossHPT[1], g_fBossHPT[2]);
-				g_pBossHP->GL_SetTranslatMatrix(g_mxBossHPT);	//左移減血
-			}
+			g_pPlayer->DeleteBullet();
+			g_fBossHPT[0] -= delta * 5;
+			g_mxBossHPT = Translate(g_fBossHPT[0], g_fBossHPT[1], g_fBossHPT[2]);
+			g_pBossHP->GL_SetTranslatMatrix(g_mxBossHPT);
+			if (g_fBossHPT[0] >= -3.33f)_BossStatus = 1;
+			else if (g_fBossHPT[0] >= -6.66f)_BossStatus = 2;
+			else if (g_fBossHPT[0] >= -10.0f)_BossStatus = 3;
+			else if (g_fBossHPT[0] < -10.0f)_BossAlive = false;
+		}
+		//boss子彈擊中玩家
+		if (fBBullet_y < PLAYER_Y_AXIS + 1.5f && fBBullet_y > PLAYER_Y_AXIS - 1.5f &&
+			fBBullet_x < g_fPTx + 1.5f && fBBullet_x > g_fPTx - 1.5f) {
+			g_pBoss->DeleteBullet();
+			g_pPlayer->AttackedByEnemies(delta);
 		}
 	}
 	
@@ -174,9 +180,9 @@ void onFrameMove(float delta)
 	g_pBG->UpdateMatrix(delta);
 	for (int i = 0; i < MOB_NUM; i++)
 	{
-		g_pMob[i]->UpdateMatrix(delta);
+		g_pMob[i]->UpdateMatrix(delta, _MobStatus);
 	}
-	g_pBoss->UpdateMatrix(delta);
+	g_pBoss->UpdateMatrix(delta, _BossStatus);
 	g_pBossHP->UpdateMatrix(delta);
 	
 

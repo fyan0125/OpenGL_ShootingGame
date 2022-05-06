@@ -18,8 +18,7 @@ protected:
 public:
 	CBullet();
 	CBullet(float y);
-	~CBullet();
-	CBullet *link;						
+	~CBullet();					
 
 	bool _isShoot;						
 	float _fBulletSpeed;				
@@ -29,11 +28,9 @@ public:
 
 	void PlayerShoot(float delta, float passive_x);
 	void ShootBulletDown(float delta, float passive_x, float passive_y, mat4 &mxS);
-	void ResetBullet(float x);
-	void ResetBullet(mat4 &mat, float x, float y);
 
 	mat4 GetTranslateMatrix();
 	mat4 GetTRSMatrix();
-	float getPosition();
+	float GetBulletPosition();
 };
 #endif

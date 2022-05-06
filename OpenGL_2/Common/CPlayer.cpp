@@ -125,7 +125,7 @@ void CPlayer::ShootBullet(float delta, float passive_x)
 	for (vector<CBullet *>::iterator spriteIterator = ballsAry->begin();
 		spriteIterator != ballsAry->end(); spriteIterator++)
 	{
-		if ((*spriteIterator)->getPosition() > 7)
+		if ((*spriteIterator)->GetBulletPosition() > 7)
 		{
 			deleteArray.push_back(spriteIterator);
 		}

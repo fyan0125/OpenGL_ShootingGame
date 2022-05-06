@@ -22,7 +22,7 @@ public:
 	CMob();
 	~CMob();
 
-	void UpdateMatrix(float);			//更新運動
+	void UpdateMatrix(float, int);			//更新運動
 	void GL_Draw();
 	void GL_SetTRSMatrix(mat4 &mat);
 	void SetColor(int RandomColor);				//設定小怪顏色

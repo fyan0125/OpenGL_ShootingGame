@@ -28,7 +28,7 @@ public:
 	CEnemy();
 	virtual ~CEnemy();
 
-	virtual void UpdateMatrix(float) = 0;			//更新運動
+	virtual void UpdateMatrix(float delta, int Status) = 0;			//更新運動
 	virtual void GL_Draw() = 0;
 	mat4 GetTranslateMatrix();						//取得BOSS位置
 	mat4 GetBulletTranslateMatrix();				//取得子彈位置

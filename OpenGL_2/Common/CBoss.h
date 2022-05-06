@@ -25,7 +25,7 @@ public:
 	CBoss();
 	~CBoss();
 
-	void UpdateMatrix(float);			//更新運動
+	void UpdateMatrix(float delta, int BossStatus);			//更新運動
 	void GL_Draw();
 	void GL_SetTRSMatrix(mat4 &mat);
 	void SetColor(int RandomColor);				//設定小怪顏色

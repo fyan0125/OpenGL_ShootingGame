@@ -21,7 +21,7 @@ CBoss::~CBoss()
 }
 
 //----------------------------------------------
-void CBoss::UpdateMatrix(float delta)
+void CBoss::UpdateMatrix(float delta, int BossStatus)
 {
 	if (first)
 	{
@@ -36,10 +36,26 @@ void CBoss::UpdateMatrix(float delta)
 		if (_fMAngle_Track > 360) _fMAngle_Track -= 360;
 
 		float sint = sinf(_fMAngle_Track);
+		float sin2t = sinf(_fMAngle_Track * 2.f);
 		float cost2 = cosf(_fMAngle_Track / 2.f);
-		_fMT[0] = (cost2 * sint) * 4;
-		_fMT[1] = (cost2)+5.0f;
-		_mxET = Translate(_fMT[0], _fMT[1], _fMT[2]);
+		if (BossStatus == 1)
+		{
+			_fMT[0] = (cost2 * sint) * 4;
+			_fMT[1] = (cost2)+5.0f;
+			_mxET = Translate(_fMT[0], _fMT[1], _fMT[2]);
+		}
+		else if (BossStatus == 2)
+		{
+			_fMT[0] = cost2 * 4;
+			_fMT[1] = sint + 5.0f;
+			_mxET = Translate(_fMT[0], _fMT[1], _fMT[2]);
+		}
+		else if (BossStatus == 3)
+		{
+			_fMT[0] = cost2 * 4;
+			_fMT[1] = sin2t + 5.0f;
+			_mxET = Translate(_fMT[0], _fMT[1], _fMT[2]);
+		}
 	}
 	
 	_pEnemy->setTRSMatrix(_mxET);
@@ -104,7 +120,7 @@ void CBoss::ShootBullet(float delta)
 	for (vector<CBullet *>::iterator spriteIterator = ballsAry->begin();
 		spriteIterator != ballsAry->end(); spriteIterator++)
 	{
-		if ((*spriteIterator)->getPosition() < -7)
+		if ((*spriteIterator)->GetBulletPosition() < -7)
 		{
 			deleteArray.push_back(spriteIterator);
 		}

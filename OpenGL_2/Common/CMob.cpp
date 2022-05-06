@@ -22,7 +22,7 @@ CMob::~CMob()
 }
 
 //----------------------------------------------
-void CMob::UpdateMatrix(float delta)
+void CMob::UpdateMatrix(float delta, int status)
 {
 	_fMT[1] -= delta * _fMSpeed;	//y®y¼Ð
 	_mxET = Translate(_fMT[0], _fMT[1], _fMT[2]);
@@ -87,7 +87,7 @@ void CMob::ShootBullet(float delta)
 	for (vector<CBullet *>::iterator spriteIterator = ballsAry->begin();
 		spriteIterator != ballsAry->end(); spriteIterator++)
 	{
-		if ((*spriteIterator)->getPosition() < -7)
+		if ((*spriteIterator)->GetBulletPosition() < -7)
 		{
 			deleteArray.push_back(spriteIterator);
 		}
