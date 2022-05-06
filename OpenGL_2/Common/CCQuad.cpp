@@ -63,6 +63,8 @@ CCQuad::CCQuad(int objectID)
 		_Points[27] = vec4(1.1357f, -1.9671f, 0.0f, 1.0f);//3
 		_Points[28] = vec4(2.2714f, 0.0000f, 0.0f, 1.0f);//5
 		_Points[29] = vec4(-1.1357f, -1.9671f, 0.0f, 1.0f);//1
+		_Colors = new vec4[_nVtx];
+		for (int i = 0; i < _nVtx; i++) _Colors[i] = vec4(1.0f, 1.0f, 1.0f, 1.0f);
 		break;
 	case 1://bullet
 		_nVtx = 18;
@@ -86,20 +88,28 @@ CCQuad::CCQuad(int objectID)
 		_Points[15] = vec4(4.4500f, 0.0000f, 0.0f, 1.0f);//8
 		_Points[16] = vec4(3.1458f, 3.1458f, 0.0f, 1.0f);//7
 		_Points[17] = vec4(3.1458f, - 3.1458f, 0.0f, 1.0f);//3
+		_Colors = new vec4[_nVtx];
+		for (int i = 0; i < _nVtx; i++) _Colors[i] = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+		break;
+	case 3://player
+		_nVtx = 9;
+		_Points = new vec4[_nVtx];
 
-		//vec4(-3.1458f, - 3.1458f, 0.0f, 1.0f);//1
-		//vec4(0.0000f, - 4.4500f, 0.0f, 1.0f);//2
-		//vec4(3.1458f, - 3.1458f, 0.0f, 1.0f);//3
-		//vec4(-4.4500f, - 0.0000f, 0.0f, 1.0f);//4
-		//vec4(-3.1458f, 3.1458f, 0.0f, 1.0f);//5
-		//vec4(-0.0000f, 4.4500f, 0.0f, 1.0f);//6
-		//vec4(3.1458f, 3.1458f, 0.0f, 1.0f);//7
-		//vec4(4.4500f, 0.0000f, 0.0f, 1.0f);//8
-
+		_Points[0] = vec4(3.0462f, -2.3839f, 0.0f, 1.0f);
+		_Points[1] = vec4(-0.0000f, 4.7240f, 0.0f, 1.0f);
+		_Points[2] = vec4(-3.0462f, -2.3839f, 0.0f, 1.0f);
+		_Points[3] = vec4(1.0154f, - 2.3839f, 1.0f, 1.0f);
+		_Points[4] = vec4(0.0000f, 4.7240f, 1.0f, 1.0f);
+		_Points[5] = vec4(-1.0154f, - 2.3839f, 1.0f, 1.0f);
+		_Points[6] = vec4(-1.0154f, - 2.3839f, 1.0f, 1.0f);
+		_Points[7] = vec4(0.0000f, - 4.4147f, 1.0f, 1.0f);
+		_Points[8] = vec4(1.0154f, - 2.3839f, 1.0f, 1.0f);
+		_Colors = new vec4[_nVtx];
+		for (int i = 0; i < 3; i++) _Colors[i] = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+		for (int i = 3; i < _nVtx; i++) _Colors[i] = vec4(1.0f, 0.0f, 1.0f, 1.0f);
 		break;
 	}
-	_Colors = new vec4[_nVtx];
-	for (int i = 0; i < _nVtx; i++) _Colors[i] = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	
 
 	// Create and initialize a buffer object 
 	CreateBufferObject();

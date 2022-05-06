@@ -3,12 +3,12 @@
 
 CPlayer::CPlayer()
 {
-	_pPlayer = new CCQuad();
-	_pPlayer->setColor(vec4(1.0f, 0.0f, 1.0f, 1.0f));
+	_pPlayer = new CCQuad(3);
+	//_pPlayer->setColor(vec4(1.0f, 0.0f, 1.0f, 1.0f));
 	_pPlayer->setShaderName("vsVtxColor.glsl", "fsVtxColor.glsl");
 	_pPlayer->setShader(g_mxModelView, g_mxProjection);
 	_mxPT = Translate(0, PLAYER_Y_AXIS, 0);
-	_fscale = 0.5f;
+	_fscale = 0.15f;
 	_mxPS = Scale(_fscale, _fscale, _fscale);
 	_pPlayer->setTRSMatrix(_mxPT*_mxPS);
 
@@ -77,7 +77,7 @@ void CPlayer::AttackedByEnemies(float delta)
 	if (updates >= 300) {
 		_MaskNum -= 1;
 		updates = 0;
-		cout << "hit" << endl;
+		cout << _MaskNum << endl;
 	}
 	updates++;
 }
