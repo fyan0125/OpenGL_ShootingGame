@@ -8,7 +8,7 @@ CPlayer::CPlayer()
 	_pPlayer->setShaderName("vsVtxColor.glsl", "fsVtxColor.glsl");
 	_pPlayer->setShader(g_mxModelView, g_mxProjection);
 	_mxPT = Translate(0, PLAYER_Y_AXIS, 0);
-	_fscale = 0.15f;
+	_fscale = 0.1f;
 	_mxPS = Scale(_fscale, _fscale, _fscale);
 	_pPlayer->setTRSMatrix(_mxPT*_mxPS);
 
@@ -202,5 +202,17 @@ void CPlayer::DeleteBullet()
 		deleteIterator != deleteArray.end(); deleteIterator++)
 	{
 		ballsAry->erase(*deleteIterator);
+	}
+	vector<vector<CBullet *>::iterator> deleteArray2;
+	for (vector<CBullet *>::iterator spriteIterator = ballsAry2->begin();
+		spriteIterator != ballsAry2->end(); spriteIterator++)
+	{
+		deleteArray2.push_back(spriteIterator);
+	}
+
+	for (vector<vector<CBullet *>::iterator>::iterator deleteIterator = deleteArray2.begin();
+		deleteIterator != deleteArray2.end(); deleteIterator++)
+	{
+		ballsAry2->erase(*deleteIterator);
 	}
 }

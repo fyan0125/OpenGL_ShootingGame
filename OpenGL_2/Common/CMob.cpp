@@ -10,7 +10,7 @@ CMob::CMob()
 	if (RandomColor == 0) _pEnemy->setColor(vec4(0.0f, 0.6235f, 0.7176f, 1), vec4(0.9529f, 0.9529f, 0.9529f, 1.0f));		//隨機顏色
 	else if (RandomColor == 1) _pEnemy->setColor(vec4(0.9960f, 0.8431f, 0.4f, 1), vec4(0.9529f, 0.9529f, 0.9529f, 1.0f));
 	_fMT[0] = -X + (rand() % (X * 2) + (rand() % 10) * 0.1);	//x座標
-	_fMT[1] = Y + (rand() % 25 + (rand() % 10) * 5);			//y座標
+	_fMT[1] = ((rand() % 15) * 2 + (rand() % 25) * 2);			//y座標
 	_mxET = Translate(_fMT[0], _fMT[1], 0);
 	_mxMR = RotateZ(180.0f);
 	_fscale = 0.15f;
@@ -60,7 +60,7 @@ void CMob::ShootBullet(float delta)
 	static int updates = 0;
 	if (_fMT[1] <= 7.0f && _fMT[1] >= -7.0f)
 	{
-		if (updates >= 7000) {
+		if (updates >= 10000) {
 			CBullet *ball = new CBullet;
 			ballsAry->push_back(ball);
 			updates = 0;
