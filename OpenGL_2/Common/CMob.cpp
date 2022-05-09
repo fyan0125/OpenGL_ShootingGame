@@ -60,7 +60,7 @@ void CMob::ShootBullet(float delta)
 	static int updates = 0;
 	if (_fMT[1] <= 7.0f && _fMT[1] >= -7.0f)
 	{
-		if (updates >= 5000) {
+		if (updates >= 7000) {
 			CBullet *ball = new CBullet;
 			ballsAry->push_back(ball);
 			updates = 0;

@@ -44,6 +44,11 @@ void CPlayer::GL_Draw()
 	{
 		(*spriteIterator)->GL_Draw();
 	}
+	for (vector<CBullet *>::iterator spriteIterator = ballsAry2->begin();
+		spriteIterator != ballsAry2->end(); spriteIterator++)
+	{
+		(*spriteIterator)->GL_Draw();
+	}
 }
 
 void CPlayer::UpdateMatrix(float delta)
@@ -66,6 +71,11 @@ mat4 CPlayer::GetTranslateMatrix()
 mat4 CPlayer::GetBulletTranslateMatrix()
 {
 	return _mxBT;
+}
+
+void CPlayer::UpdateScale(float playerScale)
+{
+	_fscale = playerScale;
 }
 
 float CPlayer::GetPlayerScale()
@@ -108,6 +118,7 @@ void CPlayer::GL_SetTranslatMatrix(mat4 &mat)
 void CPlayer::CreateBulletList()
 {
 	ballsAry = new vector<CBullet *>;
+	ballsAry2 = new vector<CBullet *>;
 }
 
 void CPlayer::ShootBullet(float delta, float passive_x, int bullet_time)
@@ -141,6 +152,40 @@ void CPlayer::ShootBullet(float delta, float passive_x, int bullet_time)
 		deleteIterator != deleteArray.end(); deleteIterator++)
 	{
 		ballsAry->erase(*deleteIterator);
+	}
+}
+
+void CPlayer::ShootBullet2(float delta, float passive_x, int bullet_time)
+{
+	static int updates = 0;
+	if (updates >= bullet_time) {
+		CBullet *ball = new CBullet;
+		ballsAry2->push_back(ball);
+		updates = 0;
+	}
+	updates++;
+
+	for (vector<CBullet *>::iterator spriteIterator = ballsAry2->begin();
+		spriteIterator != ballsAry2->end(); spriteIterator++)
+	{
+		(*spriteIterator)->PlayerShoot(delta, passive_x);
+		_mxBT = (*spriteIterator)->GetTranslateMatrix();
+	}
+
+	vector<vector<CBullet *>::iterator> deleteArray;
+	for (vector<CBullet *>::iterator spriteIterator = ballsAry2->begin();
+		spriteIterator != ballsAry2->end(); spriteIterator++)
+	{
+		if ((*spriteIterator)->GetBulletPosition() > 7)
+		{
+			deleteArray.push_back(spriteIterator);
+		}
+	}
+
+	for (vector<vector<CBullet *>::iterator>::iterator deleteIterator = deleteArray.begin();
+		deleteIterator != deleteArray.end(); deleteIterator++)
+	{
+		ballsAry2->erase(*deleteIterator);
 	}
 }
 

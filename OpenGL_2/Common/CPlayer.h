@@ -33,6 +33,7 @@ protected:
 	mat4 _mxBT;
 
 	vector<CBullet *> *ballsAry;
+	vector<CBullet *> *ballsAry2;
 
 public:
 	CPlayer();
@@ -46,12 +47,14 @@ public:
 	void UpdateMatrix(float delta);
 	mat4 GetTranslateMatrix();
 	mat4 GetBulletTranslateMatrix();
+	void UpdateScale(float playerScale);
 	float GetPlayerScale();
 	void AttackedByEnemies(float delta);
 	int GetMaskNum();
 
 	void CreateBulletList();
 	void ShootBullet(float delta, float passive_x, int bullet_time);
+	void ShootBullet2(float delta, float passive_x, int bullet_time);
 	void DeleteBullet();
 };
 #endif

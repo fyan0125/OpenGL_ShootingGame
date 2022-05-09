@@ -35,7 +35,7 @@ using namespace std;
 #define SCREENY 800
 #define HALFX (SCREENX/2) 
 #define HALFY (SCREENY/2) 
-#define MOB_NUM 15
+#define MOB_NUM 10
 
 CPlayer *g_pPlayer;
 CBG *g_pBG;
@@ -57,7 +57,9 @@ int _MobStatus = 1;
 int _BossStatus = 1;
 
 int _killedMob = 0;
-int _playerBulletTime = 700;
+int _playerStatus = 1;
+float playerScale = 0.15f;
+int _playerBulletTime = 1000;
 
 //----------------------------------------------------------------------------
 // 函式的原型宣告
@@ -98,9 +100,18 @@ void Collision(float delta)
 		mxPBulletPos = g_pPlayer->GetBulletTranslateMatrix();	//取得玩家子彈位置
 		fPBullet_x = mxPBulletPos._m[0][3];
 		fPBullet_y = mxPBulletPos._m[1][3];
-		if (_killedMob >= 5)
+		if (_killedMob >= 10)
 		{
-			_playerBulletTime = 300;
+			_playerStatus = 3;
+			playerScale = 0.25f;
+			g_pPlayer->UpdateScale(playerScale);
+		}
+		else if (_killedMob >= 5)
+		{
+			_playerStatus = 2;
+			_playerBulletTime = 500;
+			playerScale = 0.2f;
+			g_pPlayer->UpdateScale(playerScale);
 		}
 		if (g_pPlayer->GetMaskNum() < 0)_Alive = false;
 	}
@@ -198,7 +209,12 @@ void GL_Display(void)
 void onFrameMove(float delta)
 {
 	//玩家子彈
-	g_pPlayer->ShootBullet(delta, g_fPTx, _playerBulletTime);	//發射子彈
+	if (_playerStatus == 3)
+	{
+		g_pPlayer->ShootBullet(delta, g_fPTx -1.0f, _playerBulletTime);	//發射子彈
+		g_pPlayer->ShootBullet2(delta, g_fPTx + 1.0f, _playerBulletTime);	//發射子彈
+	}
+	else g_pPlayer->ShootBullet(delta, g_fPTx, _playerBulletTime);	//發射子彈
 	//小怪子彈
 	for (int i = 0; i < MOB_NUM; i++)g_pMob[i]->ShootBullet(delta);
 	g_pBoss->ShootBullet(delta);
